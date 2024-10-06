@@ -1,11 +1,12 @@
 public class CardLinkedList {
-    
+    CardNode head;
+    CardNode tail;
 
-    CardLinkedList(Card currentCard){
+    CardLinkedList(){
         
     }
 
-    CardLinkedList(){
+    public void addCard(){ // FIXME: Figure out how Deck.java interacts with CardLinkedList
         
     }
 
