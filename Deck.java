@@ -1,16 +1,17 @@
 
 // the Deck will interact with the players by giving cards
 public class Deck {
-    private Card[] deckInit;
-    private boolean[] usedCardIndex;
+    private Card[] deck;
+    private boolean[] usedCardIndex; // tells the giveCard method which card is being used. true means card is used. false means card is open
 
     Deck(){
-        deckInit = new Card[52];
+        deck = new Card[52];
         usedCardIndex = new boolean[52];
         populateDeck();
+        resetUsedCardIndex();
     }
 
-    public void populateDeck(){
+    private void populateDeck(){
         int value = 1;
         int currSuit = 1;
         for(int i = 0; i < 52; ++i){
@@ -18,23 +19,61 @@ public class Deck {
                 value = 1;
                 ++currSuit;
             }
-            deckInit[i] = new Card(currSuit, value);
-            ++value;
-
-            usedCardIndex[i] = false;
+            deck[i] = new Card(currSuit, value);
+            ++value;   
         }
-        
     }
 
+    // resets the used card index (occurs at the end of the round)
+    public void resetUsedCardIndex(){
+        for(int i = 0; i < 52; ++i){
+            usedCardIndex[i] = false;
+        }
+    }
+
+
+    // decides what card will be taken from the deck and given to the player or community hand
+    // FIXME: this method needs testing
     public Card giveCard(){
         double cardIndexDouble = Math.random()*100;
         int cardIndex = (int)Math.floor(cardIndexDouble);
         if(cardIndex > 52){
             cardIndex -= 48;
         }
+
+        /*
+            if a card is used then it will go up and down (bouncing around) the usedCardIndex array to find the nearest unused card to give to the player
+         */
         if(usedCardIndex[cardIndex] == true){
-            // FIXME figure out how to fairly give a card when a card is already taken
+            int i = cardIndex+1;
+            int j = cardIndex-1;
+            int totalIndeciesChecked = 0;
+
+            while(totalIndeciesChecked < 52){
+                if(i < 51){
+                    ++i;
+                    ++totalIndeciesChecked;
+                }
+                if(j > 0){
+                    --j;
+                    ++totalIndeciesChecked;
+                }
+
+                if(usedCardIndex[i] == false){
+                    usedCardIndex[i] = true;
+
+                    return deck[i];
+                }
+                if(usedCardIndex[j] == false){
+                    usedCardIndex[j] = true;
+
+                    return deck[j];
+                }
+            }
+
+        }else{
+            usedCardIndex[cardIndex] = true;
         }
-        return null; //FIXME
+        return deck[cardIndex];
     }
 }
