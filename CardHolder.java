@@ -1,7 +1,8 @@
 public abstract class CardHolder {
-    // Create Linked List to store Cards
-    CardHolder(){
+    CardLinkedList cardsHeld;
 
+    CardHolder(){
+        cardsHeld = new CardLinkedList();
     }
 
     public void clearHand(){

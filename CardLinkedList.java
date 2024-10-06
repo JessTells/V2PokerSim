@@ -1,10 +1,21 @@
 public class CardLinkedList {
-    public Card currentCard;
-    public Card nextCard;
+    
 
     CardLinkedList(Card currentCard){
-        this.currentCard = currentCard;
+        
     }
 
+    CardLinkedList(){
+        
+    }
+
+
+    class CardNode {
+        public Card currentCard;
+        public Card nextCard;
+        CardNode(){
+
+        }
+    }
     
 }
