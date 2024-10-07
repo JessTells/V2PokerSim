@@ -3,10 +3,19 @@ public class CardLinkedList {
     CardNode tail;
 
     CardLinkedList(){
-        
+        head = null;
+        tail = null;
     }
 
-    public void addCard(){ // FIXME: Figure out how Deck.java interacts with CardLinkedList
+    public void addCard(Card card){ // FIXME: Figure out how Deck.java interacts with CardLinkedList
+        if(head == null){
+            head = new CardNode(card);
+            tail = head;
+        }else{ // FIXME:
+            // tail.nextCard = new CardNode(card);
+            // tail = tail.nextCard;
+        }
+
         
     }
 
@@ -16,6 +25,10 @@ public class CardLinkedList {
         public Card nextCard;
         CardNode(){
 
+        }
+
+        CardNode(Card card){
+            this.currentCard = card;
         }
     }
     

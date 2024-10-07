@@ -9,7 +9,8 @@ public abstract class CardHolder {
 
     }
 
-    public void addCard(){
+    public void addCard(Card card){
+        cardsHeld.addCard(card);
         // interacts with the linkedlist
     }
 }
