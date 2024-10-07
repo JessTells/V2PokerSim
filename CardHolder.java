@@ -1,8 +1,10 @@
+import java.util.LinkedList;
 public abstract class CardHolder {
-    CardLinkedList cardsHeld;
+
+    private LinkedList<Card> cardsHeld;
 
     CardHolder(){
-        cardsHeld = new CardLinkedList();
+        cardsHeld = new LinkedList<Card>();
     }
 
     public void clearHand(){
@@ -10,7 +12,12 @@ public abstract class CardHolder {
     }
 
     public void addCard(Card card){
-        cardsHeld.addCard(card);
-        // interacts with the linkedlist
+        cardsHeld.add(card);
+    }
+
+    public void printCardsHeld(){
+        for(int i = 0; i < cardsHeld.size(); ++i){
+            System.out.println(cardsHeld.get(i));
+        }
     }
 }

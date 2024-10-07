@@ -21,7 +21,8 @@ public class Card {
         return value;
     }
 
-    public String printCard(){
+    @Override
+    public String toString(){
         String cardStr = suit + " " + value;
         return cardStr;
     }

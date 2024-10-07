@@ -36,8 +36,8 @@ public class Deck {
     public Card giveCard(){
         double cardIndexDouble = Math.random()*100;
         int cardIndex = (int)Math.floor(cardIndexDouble);
-        if(cardIndex > 52){
-            cardIndex -= 48;
+        if(cardIndex >= 52){
+            cardIndex -= 52;
         }
 
         /*
