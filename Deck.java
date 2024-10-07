@@ -33,7 +33,6 @@ public class Deck {
 
 
     // decides what card will be taken from the deck and given to the player or community hand
-    // FIXME: this method needs testing
     public Card giveCard(){
         double cardIndexDouble = Math.random()*100;
         int cardIndex = (int)Math.floor(cardIndexDouble);
@@ -77,15 +76,5 @@ public class Deck {
         return deck[cardIndex];
     }
 
-    //FIXME remove this after testing
-    public void assignRandomUsed(){
-        double randVal;
-
-        for(int i = 0; i < 52; ++i){
-            randVal = Math.random() * 10;
-            if(randVal < 7){
-                usedCardIndex[i] = true;
-            }
-        }
-    }
+    
 }
