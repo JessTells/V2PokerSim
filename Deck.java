@@ -45,8 +45,8 @@ public class Deck {
             if a card is used then it will go up and down (bouncing around) the usedCardIndex array to find the nearest unused card to give to the player
          */
         if(usedCardIndex[cardIndex] == true){
-            int i = cardIndex+1;
-            int j = cardIndex-1;
+            int i = cardIndex;
+            int j = cardIndex;
             int totalIndeciesChecked = 0;
 
             while(totalIndeciesChecked < 52){
@@ -75,5 +75,17 @@ public class Deck {
             usedCardIndex[cardIndex] = true;
         }
         return deck[cardIndex];
+    }
+
+    //FIXME remove this after testing
+    public void assignRandomUsed(){
+        double randVal;
+
+        for(int i = 0; i < 52; ++i){
+            randVal = Math.random() * 10;
+            if(randVal < 7){
+                usedCardIndex[i] = true;
+            }
+        }
     }
 }
