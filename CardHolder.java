@@ -1,10 +1,9 @@
-import java.util.LinkedList;
 public abstract class CardHolder {
 
-    private LinkedList<Card> cardsHeld;
+    private CardLinkedList<Card> cardsHeld;
 
     CardHolder(){
-        cardsHeld = new LinkedList<Card>();
+        cardsHeld = new CardLinkedList<>();
     }
 
     public void clearHand(){
