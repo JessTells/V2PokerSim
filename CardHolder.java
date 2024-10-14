@@ -7,7 +7,7 @@ public abstract class CardHolder {
     }
 
     public void clearHand(){
-
+        cardsHeld.removeAll(cardsHeld);
     }
 
     public void addCard(Card card){
