@@ -1,4 +1,3 @@
-
 /*
  A single card that contains a Suit and Number
  Acts like a node

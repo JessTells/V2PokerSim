@@ -14,9 +14,13 @@ public abstract class CardHolder {
         cardsHeld.add(card);
     }
 
+    public void sortCard(){
+        cardsHeld.sort(cardsHeld);
+    }
+
     public void printCardsHeld(){
         for(int i = 0; i < cardsHeld.size(); ++i){
             System.out.println(cardsHeld.get(i));
         }
-    }
+    }    
 }

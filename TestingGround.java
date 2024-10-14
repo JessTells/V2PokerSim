@@ -7,6 +7,7 @@ public class TestingGround {
             p1.addCard(deck.giveCard());
         }
         p1.printCardsHeld();
-
+        p1.sortCard();
+        p1.printCardsHeld();
     }
 }
