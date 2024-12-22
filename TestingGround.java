@@ -1,7 +1,7 @@
 import java.util.Scanner;
 public class TestingGround {
     public static void main(String[] args) {
-        int playerIndex = 0;
+        int amountOfPlayers = 4;
 
         Scanner scnr = new Scanner(System.in);
         RoundHandler roundHandler = new RoundHandler(scnr);
@@ -16,9 +16,14 @@ public class TestingGround {
         roundHandler.addPlayer(p3);
         roundHandler.addPlayer(p4);
 
-        roundHandler.setCurrentPlayer(playerIndex);
+        roundHandler.setCurrentPlayer(0);
 
-        roundHandler.blindBet();
+        // blind bet phase
+        for(int i = 0; i < amountOfPlayers; ++i){
+            roundHandler.setCurrentPlayer(i);
+            roundHandler.blindBet();
+        }
+
 
         
     }

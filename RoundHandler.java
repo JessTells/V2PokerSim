@@ -19,29 +19,37 @@ public class RoundHandler {
     }
 
     public void blindBet(){
-        System.out.println("(1) Blind bet: 3");
+        if(previousBet == 0){
+            previousBet = 3;
+        }
+        System.out.printf("(1) Current Blind Bet: %d\n", previousBet);
         System.out.println("(2) Raise?");
+        System.out.printf("Enter your choice: ");
         int currPlayerChoice = scnr.nextInt();
         switch(currPlayerChoice){
             case 1:
-            
-            if(3 > currentPlayer.getBalance()){
+            if(previousBet > currentPlayer.getBalance()){
                 currPlayerBet(currentPlayer.getBalance());
             }else{
-                currPlayerBet(3);
+                currPlayerBet(previousBet);
             }
             break;
             
             case 2:
+            System.out.print("Enter your bet amount: ");
             int betAmount = scnr.nextInt();
             if(betAmount > currentPlayer.getBalance()){
                 betAmount = currentPlayer.getBalance();
+            }else if(betAmount < previousBet){
+                System.out.println("\n* Value is less than previous bet *\n");
+                blindBet();
+            }else{
+                currPlayerBet(betAmount);
             }
-            currPlayerBet(betAmount);
             break;
 
             default:
-            System.out.println("\n* Enter a valid choice* \n");
+            System.out.println("\n* Enter a valid choice *\n");
             blindBet();
             break;
         }
