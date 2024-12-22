@@ -12,6 +12,10 @@ public class Player extends CardHolder{
         return balance;
     }
 
+    public String getPlayerName(){
+        return playerName;
+    }
+
     public void bet(int betAmt){
         balance -= betAmt;
     }

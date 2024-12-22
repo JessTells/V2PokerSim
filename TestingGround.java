@@ -19,10 +19,15 @@ public class TestingGround {
         roundHandler.setCurrentPlayer(0);
 
         // blind bet phase
-        for(int i = 0; i < amountOfPlayers; ++i){
-            roundHandler.setCurrentPlayer(i);
+        int betCounter = 0;
+        roundHandler.setCurrentPlayer(betCounter);
+        while(roundHandler.getCurrentPlayer() != roundHandler.getPreviousPlayerWhoRaise()){
             roundHandler.blindBet();
+            ++betCounter;
+            roundHandler.setCurrentPlayer(betCounter);
         }
+
+        // betting phase
 
 
         
