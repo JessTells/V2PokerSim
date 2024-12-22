@@ -11,6 +11,7 @@ public class RoundHandler {
 
     RoundHandler(Scanner scnr){
         this.scnr = scnr;
+        players = new ArrayList<>();
     }
 
     public void addPlayer(Player p){
@@ -19,7 +20,7 @@ public class RoundHandler {
 
     public void blindBet(){
         System.out.println("(1) Blind bet: 3");
-        System.out.print("(2) Raise?");
+        System.out.println("(2) Raise?");
         int currPlayerChoice = scnr.nextInt();
         switch(currPlayerChoice){
             case 1:
@@ -50,6 +51,10 @@ public class RoundHandler {
         currentPlayer.subFromBalance(betAmount);
         pot += betAmount;
         previousBet = betAmount;
+    }
+
+    public void setCurrentPlayer(int playerIndex){
+        currentPlayer = players.get(playerIndex % players.size());
     }
 
     /*

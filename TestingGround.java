@@ -1,6 +1,8 @@
 import java.util.Scanner;
 public class TestingGround {
     public static void main(String[] args) {
+        int playerIndex = 0;
+
         Scanner scnr = new Scanner(System.in);
         RoundHandler roundHandler = new RoundHandler(scnr);
         Deck deck = new Deck();
@@ -13,5 +15,11 @@ public class TestingGround {
         roundHandler.addPlayer(p2);
         roundHandler.addPlayer(p3);
         roundHandler.addPlayer(p4);
+
+        roundHandler.setCurrentPlayer(playerIndex);
+
+        roundHandler.blindBet();
+
+        
     }
 }
