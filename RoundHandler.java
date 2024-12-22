@@ -5,6 +5,8 @@ public class RoundHandler {
     private Scanner scnr;
     private ArrayList<Player> players;
     private Player currentPlayer;
+    private int pot;
+    private int previousBet;
     
 
     RoundHandler(Scanner scnr){
@@ -22,9 +24,19 @@ public class RoundHandler {
         switch(currPlayerChoice){
             case 1:
             
+            if(3 > currentPlayer.getBalance()){
+                currPlayerBet(currentPlayer.getBalance());
+            }else{
+                currPlayerBet(3);
+            }
             break;
             
             case 2:
+            int betAmount = scnr.nextInt();
+            if(betAmount > currentPlayer.getBalance()){
+                betAmount = currentPlayer.getBalance();
+            }
+            currPlayerBet(betAmount);
             break;
 
             default:
@@ -32,6 +44,12 @@ public class RoundHandler {
             blindBet();
             break;
         }
+    }
+
+    public void currPlayerBet(int betAmount){
+        currentPlayer.subFromBalance(betAmount);
+        pot += betAmount;
+        previousBet = betAmount;
     }
 
     /*

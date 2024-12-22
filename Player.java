@@ -8,6 +8,10 @@ public class Player extends CardHolder{
         this.playerName = playerName;
     }
 
+    public int getBalance(){
+        return balance;
+    }
+
     public void bet(int betAmt){
         balance -= betAmt;
     }
