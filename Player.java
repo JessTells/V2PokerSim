@@ -16,6 +16,10 @@ public class Player extends CardHolder{
         balance += add;
     }
 
+    public void subFromBalance(int sub){
+        balance -= sub;
+    }
+
     @Override
     public String toString() {
         String s = String.format("%s: %.2d", playerName, balance);
