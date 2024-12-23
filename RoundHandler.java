@@ -114,6 +114,11 @@ public class RoundHandler {
         return players.size();
     }
 
+    public void currentPlayerWon(){
+        currentPlayer.addToBalance(pot);
+        System.out.printf("%s has won the pot of %d credits", currentPlayer.getPlayerName(), pot);
+    }
+
     /*
         A simple round in Texas Holdem Poker:
         Blind Bet of p1

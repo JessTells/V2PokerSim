@@ -27,8 +27,8 @@ public class TestingGround {
             roundHandler.setCurrentPlayer(betCounter);
         }
 
-        if(roundHandler.getAmountOfPlayers() < 1){
-            System.out.println("Winner");
+        if(roundHandler.getAmountOfPlayers() == 1){
+            roundHandler.currentPlayerWon();
         }
 
         // flop
