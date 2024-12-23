@@ -1,8 +1,6 @@
 import java.util.Scanner;
 public class TestingGround {
     public static void main(String[] args) {
-        int amountOfPlayers = 4;
-
         Scanner scnr = new Scanner(System.in);
         RoundHandler roundHandler = new RoundHandler(scnr);
         Deck deck = new Deck();
@@ -21,13 +19,21 @@ public class TestingGround {
         // blind bet phase
         int betCounter = 0;
         roundHandler.setCurrentPlayer(betCounter);
-        while(roundHandler.getCurrentPlayer() != roundHandler.getPreviousPlayerWhoRaise()){
-            roundHandler.blindBet();
-            ++betCounter;
+        while(roundHandler.getCurrentPlayer() != roundHandler.getPreviousPlayerWhoRaise() && roundHandler.getAmountOfPlayers() > 1){
+            boolean currentPlayerFolded = roundHandler.blindBet();
+            if(!currentPlayerFolded){
+                ++betCounter;
+            }
             roundHandler.setCurrentPlayer(betCounter);
         }
 
-        // betting phase
+        if(roundHandler.getAmountOfPlayers() < 1){
+            System.out.println("Winner");
+        }
+
+        // flop
+
+        // non-blind bet phase
 
 
         

@@ -21,7 +21,7 @@ public class RoundHandler {
         players.add(p);
     }
 
-    public void blindBet(){
+    public boolean blindBet(){
         if(previousBet == 0){
             previousBet = 3;
         }
@@ -38,20 +38,19 @@ public class RoundHandler {
             }else{
                 currPlayerBet(previousBet);
             }
-            break;
+            return false;
             
             case 2:
             playerRaise();
-            break;
+            return false;
 
             case 3:
             removePlayerFromRound();
-            break;
+            return true;
 
             default:
             System.out.println("\n* Enter a valid choice *\n");
-            blindBet();
-            break;
+            return blindBet();
         }
     }
 
@@ -89,6 +88,7 @@ public class RoundHandler {
         for(int i = 0; i < players.size(); ++i){
             if(currentPlayer == players.get(i)){
                 foldedPlayers[i] = currentPlayer;
+                players.remove(i);
             }
         }
     }
@@ -108,6 +108,10 @@ public class RoundHandler {
 
     public Player getPreviousPlayerWhoRaise(){
         return previousPlayerWhoRaised;
+    }
+
+    public int getAmountOfPlayers(){
+        return players.size();
     }
 
     /*
