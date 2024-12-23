@@ -6,7 +6,7 @@ public abstract class CardHolder {
         cardsHeld = new CardLinkedList<>();
     }
 
-    public void clearHand(){
+    public void clearCards(){
         cardsHeld.removeAll(cardsHeld);
     }
 

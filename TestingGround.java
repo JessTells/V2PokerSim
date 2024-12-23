@@ -3,7 +3,6 @@ public class TestingGround {
     public static void main(String[] args) {
         Scanner scnr = new Scanner(System.in);
         RoundHandler roundHandler = new RoundHandler(scnr);
-        Deck deck = new Deck();
         Player p1 = new Player(1000, "p1");
         Player p2 = new Player(1000, "p2");
         Player p3 = new Player(1000, "p3");

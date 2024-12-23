@@ -4,6 +4,8 @@ import java.util.Scanner;
 public class RoundHandler {
     private Scanner scnr;
     private ArrayList<Player> players;
+    private Deck deck;
+    private CommunityHand communityHand;
     private Player[] foldedPlayers;
     private Player currentPlayer;
     private int pot;
@@ -15,6 +17,7 @@ public class RoundHandler {
         this.scnr = scnr;
         players = new ArrayList<>();
         foldedPlayers = new Player[4];
+        deck = new Deck();
     }
 
     public void addPlayer(Player p){
@@ -119,6 +122,33 @@ public class RoundHandler {
         System.out.printf("%s has won the pot of %d credits", currentPlayer.getPlayerName(), pot);
     }
 
+    public void addThreeCardsToCommunity(){
+        addSingleCardToCommunity();
+    }
+
+    public void addSingleCardToCommunity(){
+        Card cardToAdd = deck.giveCard();
+        
+        communityHand.addCard(cardToAdd);
+        
+        for(int i = 0; i < players.size(); ++i){
+            players.get(i).addCard(cardToAdd);
+        }
+        for(int i = 0; i < players.size(); ++i){
+            players.get(i).sortCard();
+        }
+    }
+
+    public void dealPlayerCards(){
+        for(int i = 0; i < players.size(); ++i){
+            players.get(i).addCard(deck.giveCard());
+            players.get(i).addCard(deck.giveCard());
+        }
+        for(int i = 0; i < players.size(); ++i){
+            players.get(i).sortCard();
+        }
+    }
+
     /*
         A simple round in Texas Holdem Poker:
         Blind Bet of p1
@@ -134,6 +164,7 @@ public class RoundHandler {
 
         If there are still players then the first card is revealed, process begins again
 
+        //TODO reorder the players ArrayList to have p1 be last
         After a round the blind bet moves on to p2
      */
 }
