@@ -1,4 +1,5 @@
 public class Player extends CardHolder{
+    private CardLinkedList<Card> cardsHeldMinusCommunity;
     private int balance;
     private String playerName;
 
@@ -6,6 +7,7 @@ public class Player extends CardHolder{
         super();
         balance = startingBalance;
         this.playerName = playerName;
+        cardsHeldMinusCommunity = new CardLinkedList<>();
     }
 
     public int getBalance(){
@@ -29,8 +31,24 @@ public class Player extends CardHolder{
     }
 
     @Override
+    public void addCard(Card card) {
+        if(super.cardsHeld.size() < 2){
+            cardsHeldMinusCommunity.add(card);
+        }
+        super.addCard(card);
+    }
+
+    @Override
     public String toString() {
-        String s = String.format("%s: %.2d", playerName, balance);
-        return s;
+        String s1 = String.format("%s: %d", playerName, balance);
+        if(super.cardsHeld.get(0) != null){
+            String s2 = String.format(" | Cards Held: [%d, %d] [%d, %d]", 
+            cardsHeldMinusCommunity.get(0).getSuit(), 
+            cardsHeldMinusCommunity.get(0).getValue(),
+            cardsHeldMinusCommunity.get(1).getSuit(), 
+            cardsHeldMinusCommunity.get(1).getValue());
+            s1 += s2;
+        }
+        return s1;
     }
 }

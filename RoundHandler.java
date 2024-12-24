@@ -18,6 +18,7 @@ public class RoundHandler {
         players = new ArrayList<>();
         foldedPlayers = new Player[4];
         deck = new Deck();
+        communityHand = new CommunityHand();
     }
 
     public void addPlayer(Player p){
@@ -66,7 +67,6 @@ public class RoundHandler {
             System.out.printf("\n* Value is less than previous bet of %d*\n\n", previousBet);
             playerRaise();
         }else{
-            // TODO add confirmation of bet
             currPlayerBet(betAmount);
             previousPlayerWhoRaised = currentPlayer;
         }
@@ -124,6 +124,8 @@ public class RoundHandler {
 
     public void addThreeCardsToCommunity(){
         addSingleCardToCommunity();
+        addSingleCardToCommunity();
+        addSingleCardToCommunity();
     }
 
     public void addSingleCardToCommunity(){
@@ -147,6 +149,16 @@ public class RoundHandler {
         for(int i = 0; i < players.size(); ++i){
             players.get(i).sortCard();
         }
+    }
+
+    public void printPlayerStates(){
+        for(int i = 0; i < players.size(); ++i){
+            System.out.println(players.get(i).toString());
+        }
+    }
+
+    public void printCommunityCards(){
+        System.out.println(communityHand.toString());
     }
 
     /*

@@ -16,6 +16,25 @@ public class TestingGround {
         roundHandler.setCurrentPlayer(0);
 
         // blind bet phase
+        //betLoop(roundHandler);
+
+        // deal cards
+        roundHandler.dealPlayerCards();
+        roundHandler.printPlayerStates();
+
+        // pre-flop bet phase
+        //betLoop(roundHandler);
+
+        // flop
+        roundHandler.addThreeCardsToCommunity();
+        roundHandler.printCommunityCards();
+        //betLoop(roundHandler);
+
+
+        
+    }
+
+    private static void betLoop(RoundHandler roundHandler){
         int betCounter = 0;
         roundHandler.setCurrentPlayer(betCounter);
         while(roundHandler.getCurrentPlayer() != roundHandler.getPreviousPlayerWhoRaise() && roundHandler.getAmountOfPlayers() > 1){
@@ -29,12 +48,5 @@ public class TestingGround {
         if(roundHandler.getAmountOfPlayers() == 1){
             roundHandler.currentPlayerWon();
         }
-
-        // flop
-
-        // non-blind bet phase
-
-
-        
     }
 }

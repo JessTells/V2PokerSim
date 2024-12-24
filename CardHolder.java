@@ -1,6 +1,6 @@
 public abstract class CardHolder {
 
-    private CardLinkedList<Card> cardsHeld;
+    protected CardLinkedList<Card> cardsHeld;
 
     CardHolder(){
         cardsHeld = new CardLinkedList<>();
@@ -16,11 +16,15 @@ public abstract class CardHolder {
 
     public void sortCard(){
         cardsHeld.sort(cardsHeld);
-    }
+    } 
 
-    public void printCardsHeld(){
+    @Override
+    public String toString() {
+        String s1 = "";
         for(int i = 0; i < cardsHeld.size(); ++i){
-            System.out.println(cardsHeld.get(i));
+            s1 += String.format("[%d, %d]", 
+            cardsHeld.get(i).getSuit(), cardsHeld.get(i).getValue());
         }
-    }    
+        return s1;
+    }
 }
