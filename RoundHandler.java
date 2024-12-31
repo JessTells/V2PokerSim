@@ -99,7 +99,7 @@ public class RoundHandler {
         }
     }
 
-    private void resetFoldedPlayers(){
+    public void resetFoldedPlayers(){
         for(int i = 0; i < foldedPlayers.length; ++i){
             if(foldedPlayers[i] != null){
                 players.add(i, foldedPlayers[i]);
@@ -168,6 +168,13 @@ public class RoundHandler {
         }
         previousBet = 3;
         previousPlayerWhoRaised = null;
+    }
+
+    public boolean isThereWinner(){
+        if(players.size() == 1){
+            return true;
+        }
+        return false;
     }
 
     /*

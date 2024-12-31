@@ -41,7 +41,7 @@ public class Player extends CardHolder{
     @Override
     public String toString() {
         String s1 = String.format("%s: %d", playerName, balance);
-        if(super.cardsHeld.get(0) != null){
+        if(super.cardsHeld.size() != 0){
             String s2 = String.format(" | Cards Held: [%d, %d] [%d, %d]", 
             cardsHeldMinusCommunity.get(0).getSuit(), 
             cardsHeldMinusCommunity.get(0).getValue(),

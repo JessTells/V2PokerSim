@@ -13,40 +13,36 @@ public class TestingGround {
         roundHandler.addPlayer(p3);
         roundHandler.addPlayer(p4);
 
-        // blind bet phase
-        roundHandler.betLoop();
-        
+        while(!roundHandler.isThereWinner()){
+            // blind bet phase
+            roundHandler.betLoop();
+            if(roundHandler.isThereWinner()){
+                break;
+            }
 
-        // deal cards
-        roundHandler.dealPlayerCards();
-        roundHandler.printPlayerStates();
+            // deal cards
+            roundHandler.dealPlayerCards();
+            roundHandler.printPlayerStates();
 
-        // pre-flop bet phase
+            // pre-flop bet phase
+            roundHandler.betLoop();
+            if(roundHandler.isThereWinner()){
+                break;
+            }
 
-        // flop
-        roundHandler.addThreeCardsToCommunity();
-        roundHandler.printCommunityCards();
+            // flop
+            roundHandler.addThreeCardsToCommunity();
+            roundHandler.printCommunityCards();
 
-        roundHandler.printPot();
-        //betLoop(roundHandler);
+            roundHandler.printPot();
+            roundHandler.betLoop();
 
-
+            roundHandler.resetFoldedPlayers();
+            roundHandler.printPlayerStates();
+            
+            break;
+        }
+        roundHandler.currentPlayerWon();
         
     }
-
-    // private static void betLoop(RoundHandler roundHandler){
-    //     int betCounter = 0;
-    //     roundHandler.setCurrentPlayer(betCounter);
-    //     while(roundHandler.getCurrentPlayer() != roundHandler.getPreviousPlayerWhoRaise() && roundHandler.getAmountOfPlayers() > 1){
-    //         boolean currentPlayerFolded = roundHandler.blindBet();
-    //         if(!currentPlayerFolded){
-    //             ++betCounter;
-    //         }
-    //         roundHandler.setCurrentPlayer(betCounter);
-    //     }
-
-    //     if(roundHandler.getAmountOfPlayers() == 1){
-    //         roundHandler.currentPlayerWon();
-    //     }
-    // }
 }
