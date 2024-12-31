@@ -11,7 +11,7 @@ public class Deck {
         resetUsedCardIndex();
     }
 
-    private void populateDeck(){
+    public void populateDeck(){
         int value = 1;
         int currSuit = 1;
         for(int i = 0; i < 52; ++i){

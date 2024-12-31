@@ -152,6 +152,10 @@ public class RoundHandler {
         System.out.println(communityHand.toString());
     }
 
+    public int getCommunityHandSize(){
+        return communityHand.cardsHeld.size();
+    }
+
     public void printPot(){
         System.out.printf("Pot: %d credits\n", pot);
     }
@@ -177,6 +181,63 @@ public class RoundHandler {
         return false;
     }
 
+    public void roundLoop(){
+        betLoop();
+        printPot();
+        if(isThereWinner()){
+            return;
+        }
+        dealPlayerCards();
+        printPlayerStates();
+        betLoop();
+        if(isThereWinner()){
+            return;
+        }
+        addThreeCardsToCommunity();
+        printPot();
+        printCommunityCards();
+        betLoop();
+        if(isThereWinner()){
+            return;
+        }
+        printPot();
+        addSingleCardToCommunity();
+        printCommunityCards();
+        betLoop();
+        if(isThereWinner()){
+            return;
+        }
+        printPot();
+        addSingleCardToCommunity();
+        printCommunityCards();
+        betLoop();
+        printPot();
+        calculateWinner();
+    }
+
+    public void calculateWinner(){
+        System.out.println("Fix RoundHandler: calculateWinner()");
+        //FIXME
+    }
+
+    public void resetEverythingForNewRound(){
+        resetFoldedPlayers();
+        communityHand.cardsHeld.clear();
+        for(int i = 0; i < players.size(); ++i){
+            players.get(i).cardsHeld.clear();
+        }
+        deck.populateDeck();
+        deck.resetUsedCardIndex();
+        setNextBlindBetStarterPlayer();
+        currentPlayer = null;
+    }
+
+    public void setNextBlindBetStarterPlayer(){
+        Player p = players.get(0);
+        players.remove(0);
+        players.add(p);
+    }
+
     /*
         A simple round in Texas Holdem Poker:
         Blind Bet of p1
@@ -191,8 +252,6 @@ public class RoundHandler {
         If all but 1 player folds then that players gets the pot
 
         If there are still players then the first card is revealed, process begins again
-
-        //TODO reorder the players ArrayList to have p1 be last
         After a round the blind bet moves on to p2
      */
 }
