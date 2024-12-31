@@ -19,16 +19,16 @@ public class RoundHandler {
         foldedPlayers = new Player[4];
         deck = new Deck();
         communityHand = new CommunityHand();
+        previousBet = 3;
     }
 
     public void addPlayer(Player p){
         players.add(p);
     }
 
-    public boolean blindBet(){
-        if(previousBet == 0){
-            previousBet = 3;
-        }
+    private boolean blindBet(){
+        boolean currentPlayerFolded = false;
+
         System.out.printf(" %s\n", currentPlayer.getPlayerName());
         System.out.printf("(1) Current Blind Bet: %d\n", previousBet);
         System.out.println("(2) Raise?");
@@ -42,20 +42,26 @@ public class RoundHandler {
             }else{
                 currPlayerBet(previousBet);
             }
-            return false;
+            break;
             
             case 2:
             playerRaise();
-            return false;
+            break;
 
             case 3:
+            currentPlayerFolded = true;
             removePlayerFromRound();
-            return true;
+            break;
 
             default:
             System.out.println("\n* Enter a valid choice *\n");
             return blindBet();
         }
+
+        if(previousPlayerWhoRaised == null && !currentPlayerFolded){
+            previousPlayerWhoRaised = currentPlayer;
+        }
+        return currentPlayerFolded;
     }
 
     private void playerRaise(){
@@ -72,15 +78,12 @@ public class RoundHandler {
         }
     }
 
-    public void currPlayerBet(int betAmount){
+    private void currPlayerBet(int betAmount){
         currentPlayer.subFromBalance(betAmount);
         pot += betAmount;
         previousBet = betAmount;
     }
 
-    public void setCurrentPlayer(int playerIndex){
-        currentPlayer = players.get(playerIndex % players.size());
-    }
 
     private void removePlayerFromRound(){
         if(players.size() > foldedPlayers.length){
@@ -96,25 +99,13 @@ public class RoundHandler {
         }
     }
 
-    public void resetFoldedPlayers(){
+    private void resetFoldedPlayers(){
         for(int i = 0; i < foldedPlayers.length; ++i){
             if(foldedPlayers[i] != null){
                 players.add(i, foldedPlayers[i]);
             }
             foldedPlayers[i] = null;
         }
-    }
-
-    public Player getCurrentPlayer(){
-        return currentPlayer;
-    }
-
-    public Player getPreviousPlayerWhoRaise(){
-        return previousPlayerWhoRaised;
-    }
-
-    public int getAmountOfPlayers(){
-        return players.size();
     }
 
     public void currentPlayerWon(){
@@ -159,6 +150,24 @@ public class RoundHandler {
 
     public void printCommunityCards(){
         System.out.println(communityHand.toString());
+    }
+
+    public void printPot(){
+        System.out.printf("Pot: %d credits\n", pot);
+    }
+
+    public void betLoop(){
+        int betCounter = 0;
+        currentPlayer = players.get(betCounter);
+        while(currentPlayer != previousPlayerWhoRaised){
+            boolean currentPlayerFolded = blindBet();
+            if(!currentPlayerFolded){
+                ++betCounter;
+            }
+            currentPlayer = players.get(betCounter%players.size());
+        }
+        previousBet = 3;
+        previousPlayerWhoRaised = null;
     }
 
     /*

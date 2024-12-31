@@ -31,7 +31,7 @@ public class Deck {
         }
     }
 
-
+    // TODO: Test to see if this is evenly distributed
     // decides what card will be taken from the deck and given to the player or community hand
     public Card giveCard(){
         double cardIndexDouble = Math.random()*100;

@@ -13,40 +13,40 @@ public class TestingGround {
         roundHandler.addPlayer(p3);
         roundHandler.addPlayer(p4);
 
-        roundHandler.setCurrentPlayer(0);
-
         // blind bet phase
-        //betLoop(roundHandler);
+        roundHandler.betLoop();
+        
 
         // deal cards
         roundHandler.dealPlayerCards();
         roundHandler.printPlayerStates();
 
         // pre-flop bet phase
-        //betLoop(roundHandler);
 
         // flop
         roundHandler.addThreeCardsToCommunity();
         roundHandler.printCommunityCards();
+
+        roundHandler.printPot();
         //betLoop(roundHandler);
 
 
         
     }
 
-    private static void betLoop(RoundHandler roundHandler){
-        int betCounter = 0;
-        roundHandler.setCurrentPlayer(betCounter);
-        while(roundHandler.getCurrentPlayer() != roundHandler.getPreviousPlayerWhoRaise() && roundHandler.getAmountOfPlayers() > 1){
-            boolean currentPlayerFolded = roundHandler.blindBet();
-            if(!currentPlayerFolded){
-                ++betCounter;
-            }
-            roundHandler.setCurrentPlayer(betCounter);
-        }
+    // private static void betLoop(RoundHandler roundHandler){
+    //     int betCounter = 0;
+    //     roundHandler.setCurrentPlayer(betCounter);
+    //     while(roundHandler.getCurrentPlayer() != roundHandler.getPreviousPlayerWhoRaise() && roundHandler.getAmountOfPlayers() > 1){
+    //         boolean currentPlayerFolded = roundHandler.blindBet();
+    //         if(!currentPlayerFolded){
+    //             ++betCounter;
+    //         }
+    //         roundHandler.setCurrentPlayer(betCounter);
+    //     }
 
-        if(roundHandler.getAmountOfPlayers() == 1){
-            roundHandler.currentPlayerWon();
-        }
-    }
+    //     if(roundHandler.getAmountOfPlayers() == 1){
+    //         roundHandler.currentPlayerWon();
+    //     }
+    // }
 }
