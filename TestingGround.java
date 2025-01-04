@@ -13,8 +13,13 @@ public class TestingGround {
         roundHandler.addPlayer(p3);
         roundHandler.addPlayer(p4);
 
-        roundHandler.roundLoop();
-        roundHandler.resetEverythingForNewRound();
+        while(true){
+            roundHandler.roundLoop();
+            roundHandler.currentPlayerWon();
+            roundHandler.resetEverythingForNewRound();
+            
+            System.out.println("\n\n  **New Round**\n");
+        }
         
     }
 }

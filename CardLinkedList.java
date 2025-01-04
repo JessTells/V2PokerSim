@@ -1,6 +1,8 @@
 import java.util.LinkedList;
 import java.util.Comparator;
 
+
+// FIXME: make separate comparator classes for various sortings to calculate CardHand rankings
 public class CardLinkedList<E> extends LinkedList<E> implements Comparator<Card>{
 
     CardLinkedList(){

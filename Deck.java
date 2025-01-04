@@ -10,13 +10,22 @@ public class Deck {
         populateDeck();
         resetUsedCardIndex();
     }
-
+    /*
+     * Diamond: 1
+     * Heart: 2
+     * Spade: 3
+     * Clover 4
+     * Jack: 11
+     * Queen: 12
+     * King: 13
+     * Ace: 1 and 14
+     */
     public void populateDeck(){
-        int value = 1;
+        int value = 2;
         int currSuit = 1;
         for(int i = 0; i < 52; ++i){
-            if(value == 14){
-                value = 1;
+            if(value == 15){
+                value = 2;
                 ++currSuit;
             }
             deck[i] = new Card(currSuit, value);
