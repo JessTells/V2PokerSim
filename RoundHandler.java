@@ -134,10 +134,6 @@ public class RoundHandler {
         System.out.println(communityHand.toString());
     }
 
-    public int getCommunityHandSize(){
-        return communityHand.cardsHeld.size();
-    }
-
     public void printPot(){
         System.out.printf("Pot: %d credits\n", pot);
     }
@@ -205,9 +201,9 @@ public class RoundHandler {
 
     public void resetEverythingForNewRound(){
         resetFoldedPlayers();
-        communityHand.cardsHeld.clear();
+        communityHand.clearCards();
         for(int i = 0; i < players.size(); ++i){
-            players.get(i).cardsHeld.clear();
+            players.get(i).clearCards();
         }
         deck.populateDeck();
         deck.resetUsedCardIndex();

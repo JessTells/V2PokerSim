@@ -1,25 +1,47 @@
-public abstract class CardHolder {
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.ArrayList;
 
-    protected CardLinkedList cardsHeld;
+public abstract class CardHolder {
+    private HashMap<Integer, ArrayList<Integer>> cardsValueMapSuitList; // for calculating hand ranks
+    private LinkedList<Card> displayCards;
 
     CardHolder(){
-        cardsHeld = new CardLinkedList();
+        displayCards = new LinkedList<>();
+        cardsValueMapSuitList = new HashMap<>();
+        for(int i = 1; i <= 14; ++i){
+            cardsValueMapSuitList.put(i, new ArrayList<Integer>());
+        }
+    }
+
+    public LinkedList<Card> getDisplayCards(){
+        return displayCards;
     }
 
     public void clearCards(){
-        cardsHeld.removeAll(cardsHeld);
+        for(Map.Entry<Integer, ArrayList<Integer>> set : cardsValueMapSuitList.entrySet()) {
+            if(set.getValue().size() > 0){
+                set.getValue().clear();
+            }
+        }
+        displayCards.clear();
     }
 
     public void addCard(Card card){
-        cardsHeld.add(card);
+        cardsValueMapSuitList.get(card.getValue()).add(card.getSuit());
+        if(card.getValue() == 14){
+            cardsValueMapSuitList.get(1).add(card.getSuit());
+        }
+        displayCards.add(card);
     }
 
     public void sortByValues(){
-        cardsHeld.sortByValue();
+        
     }
 
     public void sortBySuit(){
-        cardsHeld.sortBySuit();
+
     }
 
     public void rankCardHand(){
@@ -77,9 +99,15 @@ public abstract class CardHolder {
     @Override
     public String toString() {
         String s1 = "";
-        for(int i = 0; i < cardsHeld.size(); ++i){
-            s1 += String.format("[%d, %d]", 
-            cardsHeld.get(i).getSuit(), cardsHeld.get(i).getValue());
+
+        for(Map.Entry<Integer, ArrayList<Integer>> set : cardsValueMapSuitList.entrySet()) {
+            ArrayList<Integer> currList = set.getValue(); 
+            if(currList.size() > 0){
+                for(int i = 0; i < currList.size(); ++i){
+                    s1 += String.format("[S:%d, V:%d]",
+                     currList.get(i), set.getKey());
+                }
+            }
         }
         return s1;
     }

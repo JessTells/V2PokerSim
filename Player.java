@@ -1,5 +1,5 @@
+import java.util.LinkedList;
 public class Player extends CardHolder{
-    private CardLinkedList displayCards;
     private int balance;
     private String playerName;
 
@@ -7,16 +7,10 @@ public class Player extends CardHolder{
         super();
         balance = startingBalance;
         this.playerName = playerName;
-        displayCards = new CardLinkedList();
     }
 
     public String getCalcCards(){
-        String s = "";
-        for(int i = 0; i < super.cardsHeld.size(); ++i){
-            s += "| ";
-            s += cardsHeld.get(i).toString() + " |";
-        }
-        return s;
+        return super.toString();
     }
 
     public int getBalance(){
@@ -39,24 +33,12 @@ public class Player extends CardHolder{
         balance -= sub;
     }
 
-
-    @Override
-    public void addCard(Card card) {
-        if(super.cardsHeld.size() < 2){
-            displayCards.add(card);
-        }
-        super.addCard(card);
-        if(card.getValue() == 14){
-            Card ace = new Card(card.getSuit(), 1);
-            super.addCard(ace);
-        }
-    }
-
     @Override
     public String toString() {
         String s1 = String.format("%s: %d", playerName, balance);
-        if(super.cardsHeld.size() != 0){
-            String s2 = String.format(" | Cards Held: [%d, %d] [%d, %d]", 
+        LinkedList<Card> displayCards = getDisplayCards();
+        if(displayCards.size() > 0){
+            String s2 = String.format(" | Cards Held: [S%d, V%d] [S%d, V%d]", 
             displayCards.get(0).getSuit(), 
             displayCards.get(0).getValue(),
             displayCards.get(1).getSuit(), 
