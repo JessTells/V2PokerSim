@@ -1,6 +1,7 @@
 import java.util.Scanner;
 public class TestingGround {
     public static void main(String[] args) {
+        /*
         Scanner scnr = new Scanner(System.in);
         RoundHandler roundHandler = new RoundHandler(scnr);
         Player p1 = new Player(1000, "p1");
@@ -20,6 +21,20 @@ public class TestingGround {
             
             System.out.println("\n\n  **New Round**\n");
         }
-        
+        */
+        Deck deck = new Deck();
+        Player player = new Player(1000, "test");
+        player.addCard(deck.giveCard());
+        player.addCard(deck.giveCard());
+        player.addCard(deck.giveCard());
+        player.addCard(deck.giveCard());
+        player.addCard(deck.giveCard());
+        player.addCard(deck.giveCard());
+        player.addCard(deck.giveCard());
+        System.out.println("Standard: " + player.getCalcCards());
+        player.sortBySuit();
+        System.out.println("Suit: " + player.getCalcCards());
+        player.sortByValues();
+        System.out.println("Value: " + player.getCalcCards());
     }
 }

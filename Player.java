@@ -1,5 +1,5 @@
 public class Player extends CardHolder{
-    private CardLinkedList<Card> displayCards;
+    private CardLinkedList displayCards;
     private int balance;
     private String playerName;
 
@@ -7,7 +7,16 @@ public class Player extends CardHolder{
         super();
         balance = startingBalance;
         this.playerName = playerName;
-        displayCards = new CardLinkedList<>();
+        displayCards = new CardLinkedList();
+    }
+
+    public String getCalcCards(){
+        String s = "";
+        for(int i = 0; i < super.cardsHeld.size(); ++i){
+            s += "| ";
+            s += cardsHeld.get(i).toString() + " |";
+        }
+        return s;
     }
 
     public int getBalance(){
@@ -29,6 +38,7 @@ public class Player extends CardHolder{
     public void subFromBalance(int sub){
         balance -= sub;
     }
+
 
     @Override
     public void addCard(Card card) {

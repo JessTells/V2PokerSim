@@ -109,9 +109,9 @@ public class RoundHandler {
         for(int i = 0; i < players.size(); ++i){
             players.get(i).addCard(cardToAdd);
         }
-        for(int i = 0; i < players.size(); ++i){
-            players.get(i).sortCard();
-        }
+        // for(int i = 0; i < players.size(); ++i){
+        //     players.get(i).sortCard();
+        // }
     }
 
     public void dealPlayerCards(){
@@ -119,9 +119,9 @@ public class RoundHandler {
             players.get(i).addCard(deck.giveCard());
             players.get(i).addCard(deck.giveCard());
         }
-        for(int i = 0; i < players.size(); ++i){
-            players.get(i).sortCard();
-        }
+        // for(int i = 0; i < players.size(); ++i){
+        //     players.get(i).sortCard();
+        // }
     }
 
     public void printPlayerStates(){
