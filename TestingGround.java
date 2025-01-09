@@ -24,17 +24,11 @@ public class TestingGround {
         */
         Deck deck = new Deck();
         Player player = new Player(1000, "test");
-        player.addCard(deck.giveCard());
-        player.addCard(deck.giveCard());
-        player.addCard(deck.giveCard());
-        player.addCard(deck.giveCard());
-        player.addCard(deck.giveCard());
-        player.addCard(deck.giveCard());
-        player.addCard(deck.giveCard());
+        player.addCard(new Card(1, 14));
+        player.addCard(new Card(3, 14));
+        player.addCard(new Card(4, 14));
+        player.addCard(new Card(2, 14));
         System.out.println("Standard: " + player.getCalcCards());
-        player.sortBySuit();
-        System.out.println("Suit: " + player.getCalcCards());
-        player.sortByValues();
-        System.out.println("Value: " + player.getCalcCards());
+        player.checkForStraightFlush();
     }
 }

@@ -29,19 +29,19 @@ public abstract class CardHolder {
     }
 
     public void addCard(Card card){
-        cardsValueMapSuitList.get(card.getValue()).add(card.getSuit());
-        if(card.getValue() == 14){
-            cardsValueMapSuitList.get(1).add(card.getSuit());
+        // uses basic ordered insertion algorithm since the list gets AT MOST length of 4, so I feel it is a negligable time save
+        ArrayList<Integer> currList = cardsValueMapSuitList.get(card.getValue());
+        int compCardSuit = card.getSuit();
+        int insertIndex = 0;
+        for(int i = 0; i < currList.size() && compCardSuit > currList.get(i); ++i){
+            ++insertIndex;
         }
+        currList.add(insertIndex, compCardSuit);
+        if(card.getValue() == 14){
+            cardsValueMapSuitList.get(1).add(insertIndex, compCardSuit);;
+        }
+
         displayCards.add(card);
-    }
-
-    public void sortByValues(){
-        
-    }
-
-    public void sortBySuit(){
-
     }
 
     public void rankCardHand(){
@@ -65,32 +65,43 @@ public abstract class CardHolder {
     }
 
     public void checkForStraightFlush(){
-        // Probably need to go back to the drawing board with how cards are stored
-        // Mainly change the storage in cardsHeld
-        // thinking of a HashMap with the key as the Card Value and a LinkedList for the stored object
-        // Reasoning: For ranking the hand of the cards, I would need to quickly know sequential card values and all of the current card value suits that the player has and the compared card suits
-        // With just a LinkedList that the cards are stored in, it would be difficult to know if a player with (1, 4) (2, 4) (1, 5) (2, 5) has a Straight Flush, even though it is possible that they do
+        int sequentialStreak = 0;
+        int sequentialAndFlushStreak = 0;
 
+        ArrayList<Integer> prevList = cardsValueMapSuitList.get(1);
 
-        // cardsHeld.sortByValue();
-        // int consequtiveStreak = 0;
-        // int flushStreak = 0;
-        // int straightFlushStreak = 0;
-        // ArrayList<Integer>dupeValSuits = new ArrayList<>();
-        // int currVal = cardsHeld.get(0).getValue();
-        // int currSuit = cardsHeld.get(0).getSuit();
-        // for(int i = 1; i < cardsHeld.size(); ++i){
-        //     int compVal = cardsHeld.get(i).getValue();
-        //     int compSuit = cardsHeld.get(0).getSuit();
-        //     if(currVal == compVal){
-        //         dupeValSuits.add(currSuit);
-        //     }else if(currVal == compVal - 1){
-        //         dupeValSuits.add(currSuit);
-        //         for(int j = 0; j < dupeValSuits.size(); ++i){
-                    
-        //         }
-        //     }
-        // }
+        for(int i = 2; i < 14; ++i){
+            if(prevList.size() == 0){
+                continue;
+            }
+            boolean hasSameSuit = false;
+            ArrayList<Integer> currList = cardsValueMapSuitList.get(i);
+            if(currList.size() > 0){
+                ++sequentialStreak;
+                int j = 0;
+                int k = 0;
+                while(j < prevList.size() && k < currList.size()){
+                    if(prevList.get(j) == currList.get(k)){
+                        hasSameSuit = true;
+                    }
+                    if(prevList.get(j) < currList.get(k)){
+                        ++j;
+                    }else{
+                        ++k;
+                    }
+                }
+                if(hasSameSuit){
+                    ++sequentialAndFlushStreak;
+                }else{
+                    sequentialAndFlushStreak = 0;
+                }
+            }else{
+                sequentialStreak = 0;
+                sequentialAndFlushStreak = 0;
+            }
+            prevList = currList;
+        }
+        System.out.printf("Straight: %d, Straight-Flush: %d", sequentialStreak, sequentialAndFlushStreak);
         
     }
 
