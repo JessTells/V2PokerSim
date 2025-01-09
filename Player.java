@@ -6,6 +6,7 @@ public class Player extends CardHolder{
     private int balance;
     private String playerName;
     private HashMap<Integer, ArrayList<Integer>> cardsValueMapSuitList; // for calculating hand ranks
+    private int[] cardRanking;
 
     Player(int startingBalance, String playerName){
         super();
@@ -38,19 +39,49 @@ public class Player extends CardHolder{
     }
 
     public void rankCardHand(){
-        //7: Four of a kind
-        //  Same value for 4 cards
-        //6: Full House
-        //  3 of a kind with a pair
-        //5: Flush
-        //  5 cards of same suit    
-        //3: 3 of a kind
-        //  3 of same value
-        //2: two pair
-        //  two pairs
+        //X 9 or 10: Straight Flush
+        cardRanking = checkForStraightFlush();
+        if(cardRanking[0] == 9){
+            return;
+        }
+        
+        //X 8: Four of a kind
+        cardRanking = checkForFourKind();
+        if(cardRanking[0] == 8){
+            return;
+        }
+
+        //7: Full House
+        if(cardRanking[0] == 7){
+            return;
+        }
+
+        //6: Flush
+        if(cardRanking[0] == 6){
+            return;
+        }
+
+        //X 5: Straight
+        if(cardRanking[0] == 5){
+            return;
+        }
+
+        //4: 3 of a kind
+        if(cardRanking[0] == 4){
+            return;
+        }
+
+        //3: two pair
+        if(cardRanking[0] == 3){
+            return;
+        }
+
+        //2: pair
+        if(cardRanking[0] == 2){
+            return;
+        }
+        
         //1: high card
-        //  get highet card
-    
     }
 
     public int[] checkForStraightFlush(){
@@ -61,7 +92,7 @@ public class Player extends CardHolder{
 
         ArrayList<Integer> prevList = cardsValueMapSuitList.get(1);
 
-        for(int i = 2; i < 14; ++i){
+        for(int i = 2; i <= 14; ++i){
             ArrayList<Integer> currList = cardsValueMapSuitList.get(i);
             if(prevList.size() == 0){
                 prevList = currList;
@@ -100,12 +131,79 @@ public class Player extends CardHolder{
             }
         }
         if(highCardSeqAndFlush > 0){
-            return new int[] {8, highCardSeqAndFlush};
+            return new int[] {9, highCardSeqAndFlush};
         }
         if(highCardSeq > 0){
             return new int[] {5, highCardSeq};
         }
         return new int[] {0, 0};
+    }
+
+    public int[] checkForFourKind(){
+        for(Map.Entry<Integer, ArrayList<Integer>> set : cardsValueMapSuitList.entrySet()) {
+            if(set.getValue().size() == 4){
+                if(set.getKey() == 1){
+                    return new int[] {8, 14};
+                }else{
+                    return new int[] {8, set.getKey()};
+                }
+            }
+        }
+        return new int[] {0,0};
+    }
+
+    public int[] checkForNthOfAKind(int streak){
+        int[] rank = new int[]{0,0};
+        boolean foundPair = false;
+        boolean foundTwoPair = false;
+        boolean foundThreeKind = false;
+        boolean foundFourKind = false;
+        for(Map.Entry<Integer, ArrayList<Integer>> set : cardsValueMapSuitList.entrySet()) {
+            if(set.getValue().size() == streak){
+                switch (streak) {
+                    case 2:
+                        if(foundPair){
+                                foundTwoPair = true;
+                        }
+                        foundPair = true;
+                        rank[1] = set.getKey();
+                        break;
+                
+                    case 3:
+                        foundThreeKind = true;
+                        rank[1] = set.getKey();
+                        break;
+                    
+                    case 4:
+                        if(set.getKey() == 1){
+                            rank[1] = 14;
+                        }else{
+                            rank[1] = set.getKey();
+                        }
+                        foundFourKind = true;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+        if(foundPair){
+            rank[0] = 2;
+        }
+        if(foundTwoPair){
+            rank[0] = 3;
+        }
+        if(foundThreeKind){
+            rank[0] = 4;
+        }
+        if(foundThreeKind && foundPair){
+            rank[0] = 7;
+        }
+        if(foundFourKind){
+            rank[0] = 8;
+        }
+        return rank;
     }
 
     @Override
