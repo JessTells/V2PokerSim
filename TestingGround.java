@@ -1,4 +1,4 @@
-import java.util.Scanner;
+//import java.util.Scanner;
 public class TestingGround {
     public static void main(String[] args) {
         /*
@@ -22,12 +22,13 @@ public class TestingGround {
             System.out.println("\n\n  **New Round**\n");
         }
         */
-        Deck deck = new Deck();
+        //Deck deck = new Deck();
         Player player = new Player(1000, "test");
-        player.addCard(new Card(1, 14));
-        player.addCard(new Card(3, 14));
-        player.addCard(new Card(4, 14));
-        player.addCard(new Card(2, 14));
+        player.addCard(new Card(1, 3));
+        player.addCard(new Card(1, 4));
+        player.addCard(new Card(1, 5));
+        player.addCard(new Card(1, 6));
+        player.addCard(new Card(1, 7));
         System.out.println("Standard: " + player.getCalcCards());
         player.checkForStraightFlush();
     }

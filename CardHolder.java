@@ -45,37 +45,40 @@ public abstract class CardHolder {
     }
 
     public void rankCardHand(){
-        //Straight Flush (can also be royal flush with high of 14)
+        //8: Straight Flush (can also be royal flush with high of 14)
         //  All same suit with sequential values
-        //Four of a kind
+        //7: Four of a kind
         //  Same value for 4 cards
-        //Full House
+        //6: Full House
         //  3 of a kind with a pair
-        //Flush
+        //5: Flush
         //  5 cards of same suit    
-        //Straight
+        //4: Straight
         //  Sequential 5 cards
-        //3 of a kind
+        //3: 3 of a kind
         //  3 of same value
-        //two pair
+        //2: two pair
         //  two pairs
-        //high card
+        //1: high card
         //  get highet card
     
     }
 
-    public void checkForStraightFlush(){
+    public int[] checkForStraightFlush(){
         int sequentialStreak = 0;
         int sequentialAndFlushStreak = 0;
+        int highCardSeq = -1;
+        int highCardSeqAndFlush = -1;
 
         ArrayList<Integer> prevList = cardsValueMapSuitList.get(1);
 
         for(int i = 2; i < 14; ++i){
+            ArrayList<Integer> currList = cardsValueMapSuitList.get(i);
             if(prevList.size() == 0){
+                prevList = currList;
                 continue;
             }
             boolean hasSameSuit = false;
-            ArrayList<Integer> currList = cardsValueMapSuitList.get(i);
             if(currList.size() > 0){
                 ++sequentialStreak;
                 int j = 0;
@@ -100,9 +103,20 @@ public abstract class CardHolder {
                 sequentialAndFlushStreak = 0;
             }
             prevList = currList;
+            if(sequentialStreak == 4){
+                highCardSeq = i;
+                if(sequentialAndFlushStreak == 4){
+                    highCardSeqAndFlush = i;
+                }
+            }
         }
-        System.out.printf("Straight: %d, Straight-Flush: %d", sequentialStreak, sequentialAndFlushStreak);
-        
+        if(highCardSeqAndFlush > 0){
+            return new int[] {8, highCardSeqAndFlush};
+        }
+        if(highCardSeq > 0){
+            return new int[] {5, highCardSeq};
+        }
+        return new int[] {0, 0};
     }
 
 
