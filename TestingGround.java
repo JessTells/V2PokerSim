@@ -1,4 +1,7 @@
 //import java.util.Scanner;
+
+import java.util.Arrays;
+
 public class TestingGround {
     public static void main(String[] args) {
         /*
@@ -29,7 +32,7 @@ public class TestingGround {
         player.addCard(new Card(1, 5));
         player.addCard(new Card(1, 6));
         player.addCard(new Card(1, 7));
-        System.out.println("Standard: " + player.getCalcCards());
-        player.checkForStraightFlush();
+        System.out.println(Arrays.toString(player.checkForStraightFlush()));
+        System.out.println(player.toString());
     }
 }
