@@ -46,12 +46,12 @@ public class Player extends CardHolder{
         }
         
         //X 8: Four of a kind
-        cardRanking = checkForFourKind();
+        cardRanking = checkForNthOfAKind();
         if(cardRanking[0] == 8){
             return;
         }
 
-        //7: Full House
+        //X 7: Full House
         if(cardRanking[0] == 7){
             return;
         }
@@ -66,17 +66,17 @@ public class Player extends CardHolder{
             return;
         }
 
-        //4: 3 of a kind
+        //X 4: 3 of a kind
         if(cardRanking[0] == 4){
             return;
         }
 
-        //3: two pair
+        //X 3: two pair
         if(cardRanking[0] == 3){
             return;
         }
 
-        //2: pair
+        //X 2: pair
         if(cardRanking[0] == 2){
             return;
         }
@@ -139,55 +139,51 @@ public class Player extends CardHolder{
         return new int[] {0, 0};
     }
 
-    public int[] checkForFourKind(){
-        for(Map.Entry<Integer, ArrayList<Integer>> set : cardsValueMapSuitList.entrySet()) {
-            if(set.getValue().size() == 4){
-                if(set.getKey() == 1){
-                    return new int[] {8, 14};
-                }else{
-                    return new int[] {8, set.getKey()};
-                }
-            }
-        }
-        return new int[] {0,0};
-    }
-
-    public int[] checkForNthOfAKind(int streak){
+    public int[] checkForNthOfAKind(){
         int[] rank = new int[]{0,0};
         boolean foundPair = false;
         boolean foundTwoPair = false;
         boolean foundThreeKind = false;
         boolean foundFourKind = false;
         for(Map.Entry<Integer, ArrayList<Integer>> set : cardsValueMapSuitList.entrySet()) {
-            if(set.getValue().size() == streak){
-                switch (streak) {
-                    case 2:
-                        if(foundPair){
-                                foundTwoPair = true;
-                        }
+            switch (set.getValue().size()) {
+                case 2:
+                    if(foundPair){
+                            foundTwoPair = true;
+                    }else{
                         foundPair = true;
-                        rank[1] = set.getKey();
-                        break;
-                
-                    case 3:
-                        foundThreeKind = true;
-                        rank[1] = set.getKey();
-                        break;
+                    }
                     
-                    case 4:
-                        if(set.getKey() == 1){
-                            rank[1] = 14;
-                        }else{
-                            rank[1] = set.getKey();
-                        }
-                        foundFourKind = true;
-                        break;
+                    if(!foundTwoPair && !foundThreeKind){
+                        rank[1] = set.getKey();
+                    }
+                    break;
+            
+                case 3:
+                    foundThreeKind = true;
+                    if(!foundFourKind){
+                        rank[1] = set.getKey();
+                    }
+                    break;
+                
+                case 4:
+                    if(set.getKey() == 1){
+                        rank[1] = 14;
+                    }else{
+                        rank[1] = set.getKey();
+                    }
+                    foundFourKind = true;
+                    break;
 
-                    default:
-                        break;
-                }
+                default:
+                    break;
+            
             }
         }
+        // TODO: Test two pair
+        // TODO: Test 3 of a kind
+        // TODO: Test full house
+        // TODO: Test 4 kind;
         if(foundPair){
             rank[0] = 2;
         }
