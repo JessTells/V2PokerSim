@@ -140,7 +140,7 @@ public class Player extends CardHolder{
     }
 
     public int[] checkForNthOfAKind(){
-        int[] rank = new int[]{0,0};
+        int[] rank = new int[]{1,0};
         boolean foundPair = false;
         boolean foundTwoPair = false;
         boolean foundThreeKind = false;
@@ -176,10 +176,14 @@ public class Player extends CardHolder{
                     break;
 
                 default:
+                    if(!foundPair && !foundThreeKind && !foundFourKind){
+                        rank[1] = set.getKey();
+                    }
                     break;
             
             }
         }
+        // TODO: Test high card
         // TODO: Test two pair
         // TODO: Test 3 of a kind
         // TODO: Test full house
