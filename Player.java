@@ -6,7 +6,7 @@ public class Player extends CardHolder{
     private int balance;
     private String playerName;
     private HashMap<Integer, ArrayList<Integer>> cardsValueMapSuitList; // for calculating hand ranks
-    private int[] cardRanking;
+    private int[] handRank;
 
     Player(int startingBalance, String playerName){
         super();
@@ -39,52 +39,45 @@ public class Player extends CardHolder{
     }
 
     public void rankCardHand(){
-        //X 9 or 10: Straight Flush
-        cardRanking = checkForStraightFlush();
-        if(cardRanking[0] == 9){
+        //Works Alone X 9 or 10: Straight Flush
+        handRank = checkForStraightFlush();
+        if(handRank[0] == 9){
             return;
         }
         
-        //X 8: Four of a kind
-        cardRanking = checkForNthOfAKind();
-        if(cardRanking[0] == 8){
+        //X Works Alone 8: Four of a kind
+        handRank = checkForNthOfAKind();
+
+        //X Works Alone 7: Full House
+        if(handRank[0] > 6){
             return;
         }
 
-        //X 7: Full House
-        if(cardRanking[0] == 7){
+        //X Works Alone 6: Flush
+        handRank = checkFlush();
+        if(handRank[0] == 6){
             return;
         }
 
-        //6: Flush
-        if(cardRanking[0] == 6){
+        //X Works Alone 5: Straight
+        if(handRank[0] == 5){
             return;
         }
 
-        //X 5: Straight
-        if(cardRanking[0] == 5){
-            return;
-        }
+        //X Works Alone 4: 3 of a kind
 
-        //X 4: 3 of a kind
-        if(cardRanking[0] == 4){
-            return;
-        }
+        //X Works Alone 3: two pair
 
-        //X 3: two pair
-        if(cardRanking[0] == 3){
-            return;
-        }
-
-        //X 2: pair
-        if(cardRanking[0] == 2){
-            return;
-        }
+        //X Works Alone 2: pair
         
-        //1: high card
+        //X Works Alone 1: high card
     }
 
-    public int[] checkForStraightFlush(){
+    public int[] getCardRank(){
+        return handRank;
+    }
+
+    private int[] checkForStraightFlush(){
         int sequentialStreak = 0;
         int sequentialAndFlushStreak = 0;
         int highCardSeq = -1;
@@ -139,13 +132,16 @@ public class Player extends CardHolder{
         return new int[] {0, 0};
     }
 
-    public int[] checkForNthOfAKind(){
+    private int[] checkForNthOfAKind(){
         int[] rank = new int[]{1,0};
         boolean foundPair = false;
         boolean foundTwoPair = false;
         boolean foundThreeKind = false;
         boolean foundFourKind = false;
         for(Map.Entry<Integer, ArrayList<Integer>> set : cardsValueMapSuitList.entrySet()) {
+            if(set.getValue().size() == 0){
+                continue;
+            }
             switch (set.getValue().size()) {
                 case 2:
                     if(foundPair){
@@ -183,11 +179,7 @@ public class Player extends CardHolder{
             
             }
         }
-        // TODO: Test high card
-        // TODO: Test two pair
-        // TODO: Test 3 of a kind
-        // TODO: Test full house
-        // TODO: Test 4 kind;
+
         if(foundPair){
             rank[0] = 2;
         }
@@ -202,6 +194,26 @@ public class Player extends CardHolder{
         }
         if(foundFourKind){
             rank[0] = 8;
+        }
+        return rank;
+    }
+
+    public int[] checkFlush(){
+        int[] rank = new int[] {0, 0};
+        int[] suitCounts = new int[]{0,0,0,0};
+        for(Map.Entry<Integer, ArrayList<Integer>> set : cardsValueMapSuitList.entrySet()) {
+            ArrayList<Integer> currList = set.getValue();
+            if(currList.size() > 0){
+                for(int i = 0; i < currList.size(); ++i){
+                    ++suitCounts[currList.get(i)-1];
+                    if(suitCounts[currList.get(i)-1] >= 5){
+                        rank[1] = set.getKey();
+                    }
+                }
+            }
+        }
+        if(rank[1] > 0){
+            rank[0] = 6;
         }
         return rank;
     }

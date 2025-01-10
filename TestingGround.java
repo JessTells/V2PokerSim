@@ -27,12 +27,13 @@ public class TestingGround {
         */
         //Deck deck = new Deck();
         Player player = new Player(1000, "test");
-        player.addCard(new Card(1, 10));
-        player.addCard(new Card(1, 11));
+        player.addCard(new Card(4, 3));
+        player.addCard(new Card(4, 7));
+        player.addCard(new Card(4, 8));
+        player.addCard(new Card(1, 2));
+        player.addCard(new Card(4, 5));
         player.addCard(new Card(1, 12));
-        player.addCard(new Card(1, 13));
-        player.addCard(new Card(1, 14));
-        System.out.println(Arrays.toString(player.checkForStraightFlush()));
-        System.out.println(player.toString());
+        player.addCard(new Card(4, 4));
+        System.out.println(Arrays.toString(player.checkFlush()));
     }
 }
