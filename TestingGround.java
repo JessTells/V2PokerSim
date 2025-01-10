@@ -29,9 +29,9 @@ public class TestingGround {
         Player player = new Player(1000, "test");
         player.addCard(new Card(1, 2));
         player.addCard(new Card(1, 3));
-        player.addCard(new Card(2, 3));
-        player.addCard(new Card(2, 4));
-        player.addCard(new Card(2, 5));
+        player.addCard(new Card(1, 8));
+        player.addCard(new Card(1, 4));
+        player.addCard(new Card(1, 12));
         player.addCard(new Card(1, 5));
         player.addCard(new Card(1, 6));
         player.rankCardHand();

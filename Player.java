@@ -80,58 +80,42 @@ public class Player extends CardHolder{
 
     private int[] checkForStraightFlush(){ //FIXME: Case of [(1,2), (1,3), (2,3), (2,4), (2,5), (3,5), (3,6)] counts as sequentialAndFlush when it should not
         // possible fix: use an array[] of LinkedList<Integer> to store sequentials with array[0] being suit 1, array[1] being suit 2 etc
-        LinkedList<Integer>[] sequentialAndFlushVals = new LinkedList[5];
-
-        int sequentialStreak = 1;
-        int sequentialAndFlushStreak = 1;
-        int highCardSeq = -1;
-        int highCardSeqAndFlush = -1;
-
+        int[] sequentialStraightList = new int[] {1,1,1,1,1};
+        int highSequential = -1;
+        int highSequentialAndFlush = -1;
         ArrayList<Integer> prevList = cardsValueMapSuitList.get(1);
-
         for(int i = 2; i <= 14; ++i){
-            if(sequentialStreak >= 4){
-                highCardSeq = i-1;
-                if(sequentialAndFlushStreak >= 4){
-                    highCardSeqAndFlush = i-1;
-                }
-            }
             ArrayList<Integer> currList = cardsValueMapSuitList.get(i);
             if(prevList.size() == 0){
                 prevList = currList;
                 continue;
             }
-            boolean hasSameSuit = false;
+            
             if(currList.size() > 0){
-                ++sequentialStreak;
-                int j = 0;
-                int k = 0;
-                while(j < prevList.size() && k < currList.size()){
-                    if(prevList.get(j) == currList.get(k)){
-                        hasSameSuit = true;
-                    }
-                    if(prevList.get(j) < currList.get(k)){
-                        ++j;
-                    }else{
-                        ++k;
-                    }
+                ++sequentialStraightList[0];
+                if(sequentialStraightList[0] >= 5){
+                    highSequential = i;
                 }
-                if(hasSameSuit){
-                    ++sequentialAndFlushStreak;
-                }else{
-                    sequentialAndFlushStreak = 1;
+                for(int j = 0; j < currList.size(); ++j){
+                    ++sequentialStraightList[currList.get(j)];
+                    if(sequentialStraightList[currList.get(j)]>=5){
+                        highSequentialAndFlush = i;
+                    }
                 }
             }else{
-                sequentialStreak = 1;
-                sequentialAndFlushStreak = 1;
+                if(sequentialStraightList[0] > 1){
+                    for(int j = 0; j < sequentialStraightList.length; ++j){
+                        sequentialStraightList[j] = 1;
+                    }
+                }
             }
-            prevList = currList;
         }
-        if(highCardSeqAndFlush > 0){
-            return new int[] {9, highCardSeqAndFlush};
+
+        if(highSequentialAndFlush > 0){
+            return new int[] {9, highSequentialAndFlush};
         }
-        if(highCardSeq > 0){
-            return new int[] {5, highCardSeq};
+        if(highSequential > 0){
+            return new int[] {5, highSequential};
         }
         return new int[] {0, 0};
     }
