@@ -77,15 +77,21 @@ public class Player extends CardHolder{
         return handRank;
     }
 
-    private int[] checkForStraightFlush(){
-        int sequentialStreak = 0;
-        int sequentialAndFlushStreak = 0;
+    private int[] checkForStraightFlush(){ //FIXME: Case of [(1,2), (1,3), (2,3), (2,4), (2,5), (3,5), (3,6)] counts as sequentialAndFlush when it should not
+        int sequentialStreak = 1;
+        int sequentialAndFlushStreak = 1;
         int highCardSeq = -1;
         int highCardSeqAndFlush = -1;
 
         ArrayList<Integer> prevList = cardsValueMapSuitList.get(1);
 
         for(int i = 2; i <= 14; ++i){
+            if(sequentialStreak >= 4){
+                highCardSeq = i;
+                if(sequentialAndFlushStreak >= 4){
+                    highCardSeqAndFlush = i;
+                }
+            }
             ArrayList<Integer> currList = cardsValueMapSuitList.get(i);
             if(prevList.size() == 0){
                 prevList = currList;
@@ -109,19 +115,13 @@ public class Player extends CardHolder{
                 if(hasSameSuit){
                     ++sequentialAndFlushStreak;
                 }else{
-                    sequentialAndFlushStreak = 0;
+                    sequentialAndFlushStreak = 1;
                 }
             }else{
-                sequentialStreak = 0;
-                sequentialAndFlushStreak = 0;
+                sequentialStreak = 1;
+                sequentialAndFlushStreak = 1;
             }
             prevList = currList;
-            if(sequentialStreak == 4){
-                highCardSeq = i;
-                if(sequentialAndFlushStreak == 4){
-                    highCardSeqAndFlush = i;
-                }
-            }
         }
         if(highCardSeqAndFlush > 0){
             return new int[] {9, highCardSeqAndFlush};
@@ -198,7 +198,7 @@ public class Player extends CardHolder{
         return rank;
     }
 
-    public int[] checkFlush(){
+    private int[] checkFlush(){
         int[] rank = new int[] {0, 0};
         int[] suitCounts = new int[]{0,0,0,0};
         for(Map.Entry<Integer, ArrayList<Integer>> set : cardsValueMapSuitList.entrySet()) {

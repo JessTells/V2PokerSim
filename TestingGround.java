@@ -27,13 +27,14 @@ public class TestingGround {
         */
         //Deck deck = new Deck();
         Player player = new Player(1000, "test");
-        player.addCard(new Card(4, 3));
-        player.addCard(new Card(4, 7));
-        player.addCard(new Card(4, 8));
-        player.addCard(new Card(1, 2));
-        player.addCard(new Card(4, 5));
-        player.addCard(new Card(1, 12));
-        player.addCard(new Card(4, 4));
-        System.out.println(Arrays.toString(player.checkFlush()));
+        player.addCard(new Card(1, 4));
+        player.addCard(new Card(1, 5));
+        player.addCard(new Card(1, 6));
+        player.addCard(new Card(1, 7));
+        player.addCard(new Card(1, 8));
+        player.addCard(new Card(2, 10));
+        player.addCard(new Card(3, 9));
+        player.rankCardHand();
+        System.out.println(Arrays.toString(player.getCardRank()));
     }
 }
