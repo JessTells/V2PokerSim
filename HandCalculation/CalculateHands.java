@@ -3,38 +3,37 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import CardHolders.Player;
+
 public final class CalculateHands {
-    public static int[] rankCardHand(HashMap<Integer, ArrayList<Integer>> cardsValueMapSuitList){
+    public static void rankCardHand(Player p){
+        HashMap<Integer, ArrayList<Integer>> cardsValueMapSuitList = p.getCalcCards();
         int[] handRank = {0,0};
+        int[] hold;
 
-        //Works Alone X 9 or 10: Straight Flush
-        handRank = checkForStraightFlush(cardsValueMapSuitList);
-        if(handRank[0] == 9){
-            return handRank;
-        }
         
-        //X Works Alone 8: Four of a kind
-        handRank = checkForNthOfAKind(cardsValueMapSuitList);
-
-        //X Works Alone 7: Full House
-        if(handRank[0] > 6){
-            return handRank;
+        handRank = checkForStraightFlush(cardsValueMapSuitList); // Evaluates rank 9, 5
+        
+        hold = checkForNthOfAKind(cardsValueMapSuitList); // Evaluates rank 8, 7, 3, 2, 1 
+        if(hold[0] > handRank[0]){
+            handRank = hold;
         }
 
-        //X Works Alone 6: Flush
-        handRank = checkFlush(cardsValueMapSuitList);
-        
-        return handRank;
+        hold = checkFlush(cardsValueMapSuitList);  // Evaluates rank 6
+        if(hold[0] > handRank[0]){
+            handRank = hold;
+        }
+        p.setHandRank(handRank);
 
-        //X Works Alone 5: Straight
-
-        //X Works Alone 4: 3 of a kind
-
-        //X Works Alone 3: two pair
-
-        //X Works Alone 2: pair
-        
-        //X Works Alone 1: high card
+        //9: Straight Flush
+        //8: Four of a kind
+        //7: Full House
+        //6: Flush
+        //5: Straight
+        //4: 3 of a kind
+        //3: two pair
+        //2: pair
+        //1: high card
     }
 
     

@@ -1,13 +1,10 @@
-//import java.util.Scanner;
-
-import java.util.Arrays;
+import java.util.Scanner;
 
 import CardHolders.Player;
-import DeckAndCard.Card;
 
 public class TestingGround {
     public static void main(String[] args) {
-        /*
+        
         Scanner scnr = new Scanner(System.in);
         RoundHandler roundHandler = new RoundHandler(scnr);
         Player p1 = new Player(1000, "p1");
@@ -20,24 +17,13 @@ public class TestingGround {
         roundHandler.addPlayer(p3);
         roundHandler.addPlayer(p4);
 
-        while(true){
-            roundHandler.roundLoop();
-            roundHandler.currentPlayerWon();
-            roundHandler.resetEverythingForNewRound();
-            
-            System.out.println("\n\n  **New Round**\n");
-        }
-        */
-        //Deck deck = new Deck();
-        Player player = new Player(1000, "test");
-        player.addCard(new Card(1, 2));
-        player.addCard(new Card(1, 3));
-        player.addCard(new Card(1, 8));
-        player.addCard(new Card(1, 4));
-        player.addCard(new Card(1, 12));
-        player.addCard(new Card(1, 5));
-        player.addCard(new Card(1, 6));
-        //player.rankCardHand();
-        System.out.println(Arrays.toString(player.getHandRank()));
+        roundHandler.dealPlayerCards();
+        roundHandler.addThreeCardsToCommunity();
+        roundHandler.addSingleCardToCommunity();
+        roundHandler.addSingleCardToCommunity();
+
+        roundHandler.calculateWinner();
+
+        roundHandler.printPlayerHandRank();
     }
 }

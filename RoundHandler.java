@@ -1,8 +1,10 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import CardHolders.*;
 import DeckAndCard.*;
+import HandCalculation.CalculateHands;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -13,7 +15,7 @@ public class RoundHandler {
     private Deck deck;
     private CommunityHand communityHand;
     private HashSet<Player> foldedPlayers;
-    private Player currentPlayer;
+    private Player currentPlayerTurn;
     private int pot;
     private int previousBet;
     private Player previousPlayerWhoRaised;
@@ -35,7 +37,7 @@ public class RoundHandler {
     //TODO: make the interface for playerBet() better, make playerSelection so that in the future it interacts with bots smoothly
     //TODO: all things that require input are going to need to be changed so that it interacts with bots
     private void playerBet(){
-        System.out.printf(" %s\n", currentPlayer.getPlayerName());
+        System.out.printf(" %s\n", currentPlayerTurn.getPlayerName());
         System.out.printf("(1) Current Bet: %d\n", previousBet);
         System.out.println("(2) Raise?");
         System.out.println("(3) Fold?");
@@ -47,13 +49,13 @@ public class RoundHandler {
     private void playerSelection(int currPlayerChoice){
         switch(currPlayerChoice){
             case 1:
-            if(previousBet > currentPlayer.getBalance()){
-                currPlayerBet(currentPlayer.getBalance());
+            if(previousBet > currentPlayerTurn.getBalance()){
+                currPlayerBet(currentPlayerTurn.getBalance());
             }else{
                 currPlayerBet(previousBet);
             }
             if(previousPlayerWhoRaised == null){
-                previousPlayerWhoRaised = currentPlayer;
+                previousPlayerWhoRaised = currentPlayerTurn;
             }
             break;
             
@@ -74,27 +76,27 @@ public class RoundHandler {
     private void playerRaise(){
         System.out.print("Enter your bet amount: ");
         int betAmount = scnr.nextInt();
-        if(betAmount > currentPlayer.getBalance()){
-            betAmount = currentPlayer.getBalance();
+        if(betAmount > currentPlayerTurn.getBalance()){
+            betAmount = currentPlayerTurn.getBalance();
             currPlayerBet(betAmount);
         }else if(betAmount < previousBet){
             System.out.printf("\n* Value is less than previous bet of %d*\n\n", previousBet);
             playerRaise();
         }else{
             currPlayerBet(betAmount);
-            previousPlayerWhoRaised = currentPlayer;
+            previousPlayerWhoRaised = currentPlayerTurn;
         }
     }
 
     private void currPlayerBet(int betAmount){
-        currentPlayer.subFromBalance(betAmount);
+        currentPlayerTurn.subFromBalance(betAmount);
         pot += betAmount;
         previousBet = betAmount;
     }
 
 
     private void removePlayerFromRound(){
-        foldedPlayers.add(currentPlayer);
+        foldedPlayers.add(currentPlayerTurn);
     }
 
     public void resetFoldedPlayers(){
@@ -102,8 +104,8 @@ public class RoundHandler {
     }
 
     public void currentPlayerWon(){
-        currentPlayer.addToBalance(pot);
-        System.out.printf("%s has won the pot of %d credits", currentPlayer.getPlayerName(), pot);
+        currentPlayerTurn.addToBalance(pot);
+        System.out.printf("%s has won the pot of %d credits", currentPlayerTurn.getPlayerName(), pot);
     }
 
     public void addThreeCardsToCommunity(){
@@ -131,7 +133,17 @@ public class RoundHandler {
 
     public void printPlayerStates(){
         for(int i = 0; i < players.size(); ++i){
-            System.out.println(players.get(i).toString());
+            if(!foldedPlayers.contains(players.get(i))){
+                System.out.println(players.get(i).toString());    
+            }
+        }
+    }
+
+    public void printPlayerHandRank(){
+        for(int i = 0; i < players.size(); ++i){
+            if(!foldedPlayers.contains(players.get(i))){
+                System.out.println(players.get(i).toString() + " " + players.get(i).printHandRank());    
+            }
         }
     }
 
@@ -145,13 +157,13 @@ public class RoundHandler {
 
     public void betLoop(){
         int currPlayerIndex = 0;
-        currentPlayer = players.get(currPlayerIndex);
-        while(currentPlayer != previousPlayerWhoRaised && players.size() - foldedPlayers.size() > 1){
-            if(!foldedPlayers.contains(currentPlayer)){
+        currentPlayerTurn = players.get(currPlayerIndex);
+        while(currentPlayerTurn != previousPlayerWhoRaised && players.size() - foldedPlayers.size() > 1){
+            if(!foldedPlayers.contains(currentPlayerTurn)){
                 playerBet();
             }
             ++currPlayerIndex;
-            currentPlayer = players.get(currPlayerIndex % players.size());
+            currentPlayerTurn = players.get(currPlayerIndex % players.size());
             
         }
         previousBet = 3;
@@ -200,9 +212,27 @@ public class RoundHandler {
     }
 
     public void calculateWinner(){
+        LinkedList<Player> winnerList = new LinkedList<>();
         System.out.println("Fix RoundHandler: calculateWinner()");
         //FIXME Calculate player hands
-        
+        for(int i = 0; i < players.size(); ++i){
+            Player p = players.get(i);
+            if(!foldedPlayers.contains(p)){
+                CalculateHands.rankCardHand(p);
+                if(winnerList.isEmpty()){
+                    winnerList.add(p);
+                }else{
+                    if(p.compareTo(winnerList.get(0)) > 0){
+                        winnerList.clear();
+                        winnerList.add(p);
+                    }else if(p.compareTo(winnerList.get(0)) == 0){
+                        winnerList.add(p);
+                    }
+                    
+                }
+                
+            }
+        }// TODO: They should be ordered in the LinkedList by this point, finish this
     }
 
     public void resetEverythingForNewRound(){
@@ -214,7 +244,7 @@ public class RoundHandler {
         deck.populateDeck();
         deck.resetUsedCardIndex();
         setNextBlindBetStarterPlayer();
-        currentPlayer = null;
+        currentPlayerTurn = null;
     }
 
     public void setNextBlindBetStarterPlayer(){
