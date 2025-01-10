@@ -27,6 +27,8 @@ public class RoundHandler {
         players.add(p);
     }
 
+    //TODO: make the interface for playerBet() better, make playerSelection so that in the future it interacts with bots smoothly
+    //TODO: all things that require input are going to need to be changed so that it interacts with bots
     private void playerBet(){
         System.out.printf(" %s\n", currentPlayer.getPlayerName());
         System.out.printf("(1) Current Bet: %d\n", previousBet);
@@ -34,6 +36,10 @@ public class RoundHandler {
         System.out.println("(3) Fold?");
         System.out.printf("Enter your choice: ");
         int currPlayerChoice = scnr.nextInt();
+        playerSelection(currPlayerChoice);
+    }
+
+    private void playerSelection(int currPlayerChoice){
         switch(currPlayerChoice){
             case 1:
             if(previousBet > currentPlayer.getBalance()){

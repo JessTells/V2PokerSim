@@ -78,8 +78,7 @@ public class Player extends CardHolder{
         return handRank;
     }
 
-    private int[] checkForStraightFlush(){ //FIXME: Case of [(1,2), (1,3), (2,3), (2,4), (2,5), (3,5), (3,6)] counts as sequentialAndFlush when it should not
-        // possible fix: use an array[] of LinkedList<Integer> to store sequentials with array[0] being suit 1, array[1] being suit 2 etc
+    private int[] checkForStraightFlush(){ 
         int[] sequentialStraightList = new int[] {1,1,1,1,1};
         int highSequential = -1;
         int highSequentialAndFlush = -1;
