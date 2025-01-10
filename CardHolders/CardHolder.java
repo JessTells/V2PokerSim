@@ -1,4 +1,7 @@
+package CardHolders;
 import java.util.LinkedList;
+
+import DeckAndCard.Card;
 
 
 public abstract class CardHolder {

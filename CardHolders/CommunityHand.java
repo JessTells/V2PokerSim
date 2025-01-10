@@ -1,6 +1,7 @@
+package CardHolders;
 public class CommunityHand extends CardHolder{
     
-    CommunityHand(){
+    public CommunityHand(){
         super();
     }
 

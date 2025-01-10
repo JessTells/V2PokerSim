@@ -1,15 +1,18 @@
+package CardHolders;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class Player extends CardHolder{
+import DeckAndCard.Card;
+
+public class Player extends CardHolder implements Comparable<Player>{
     private int balance;
     private String playerName;
     private HashMap<Integer, ArrayList<Integer>> cardsValueMapSuitList; // for calculating hand ranks
     private int[] handRank;
 
-    Player(int startingBalance, String playerName){
+    public Player(int startingBalance, String playerName){
         super();
         balance = startingBalance;
         this.playerName = playerName;
@@ -43,7 +46,7 @@ public class Player extends CardHolder{
         this.handRank = handRank;
     }
 
-    public int[] getCardRank(){
+    public int[] getHandRank(){
         return handRank;
     }
 
@@ -92,7 +95,7 @@ public class Player extends CardHolder{
         for(Map.Entry<Integer, ArrayList<Integer>> set : cardsValueMapSuitList.entrySet()) {
             
             ArrayList<Integer> currList = set.getValue(); 
-            if(currList.size() > 0){
+            if(!currList.isEmpty()){
                 for(int i = 0; i < currList.size(); ++i){
                     s3 += String.format("[S:%d, V:%d] ",
                      currList.get(i), set.getKey());
@@ -103,4 +106,28 @@ public class Player extends CardHolder{
         
         return s1;
     }
+
+    @Override
+    public int compareTo(Player p) {
+        int order = Integer.compare(handRank[0], p.handRank[0]);
+        if(order == 0){
+            order = Integer.compare(handRank[1], p.handRank[0]);
+        }else{
+            return order;
+        }
+        if(order == 0){
+            for(int  i = 14; i >= 2; --i) {
+                ArrayList<Integer> xList = cardsValueMapSuitList.get(i);
+                ArrayList<Integer> yList = p.cardsValueMapSuitList.get(i);
+                if(xList.isEmpty() && !yList.isEmpty()){
+                    return -1;
+                }else if(!xList.isEmpty() && yList.isEmpty()){
+                    return 1;
+                }
+            }
+        }
+        return 0;
+    }
+
+    
 }

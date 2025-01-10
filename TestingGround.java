@@ -2,6 +2,9 @@
 
 import java.util.Arrays;
 
+import CardHolders.Player;
+import DeckAndCard.Card;
+
 public class TestingGround {
     public static void main(String[] args) {
         /*
@@ -35,6 +38,6 @@ public class TestingGround {
         player.addCard(new Card(1, 5));
         player.addCard(new Card(1, 6));
         //player.rankCardHand();
-        System.out.println(Arrays.toString(player.getCardRank()));
+        System.out.println(Arrays.toString(player.getHandRank()));
     }
 }

@@ -1,10 +1,10 @@
+package DeckAndCard;
 
-// the Deck will interact with the players by giving cards
 public class Deck {
     private Card[] deck;
     private boolean[] usedCardIndex; // tells the giveCard method which card is being used. true means card is used. false means card is open
 
-    Deck(){
+    public Deck(){
         deck = new Card[52];
         usedCardIndex = new boolean[52];
         populateDeck();
