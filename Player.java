@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+
 public class Player extends CardHolder{
     private int balance;
     private String playerName;
@@ -79,7 +80,8 @@ public class Player extends CardHolder{
 
     private int[] checkForStraightFlush(){ //FIXME: Case of [(1,2), (1,3), (2,3), (2,4), (2,5), (3,5), (3,6)] counts as sequentialAndFlush when it should not
         // possible fix: use an array[] of LinkedList<Integer> to store sequentials with array[0] being suit 1, array[1] being suit 2 etc
-        
+        LinkedList<Integer>[] sequentialAndFlushVals = new LinkedList[5];
+
         int sequentialStreak = 1;
         int sequentialAndFlushStreak = 1;
         int highCardSeq = -1;
