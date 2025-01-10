@@ -34,7 +34,7 @@ public class TestingGround {
         player.addCard(new Card(1, 12));
         player.addCard(new Card(1, 5));
         player.addCard(new Card(1, 6));
-        player.rankCardHand();
+        //player.rankCardHand();
         System.out.println(Arrays.toString(player.getCardRank()));
     }
 }

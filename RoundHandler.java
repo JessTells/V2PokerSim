@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.HashSet;
+import java.util.LinkedList;
 
 public class RoundHandler {
     private Scanner scnr;
@@ -197,6 +198,7 @@ public class RoundHandler {
     public void calculateWinner(){
         System.out.println("Fix RoundHandler: calculateWinner()");
         //FIXME Calculate player hands
+        
     }
 
     public void resetEverythingForNewRound(){
