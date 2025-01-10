@@ -46,12 +46,12 @@ public final class CalculateHands {
         ArrayList<Integer> prevList = cardsValueMapSuitList.get(1);
         for(int i = 2; i <= 14; ++i){
             ArrayList<Integer> currList = cardsValueMapSuitList.get(i);
-            if(prevList.size() == 0){
+            if(prevList.isEmpty()){
                 prevList = currList;
                 continue;
             }
             
-            if(currList.size() > 0){
+            if(!currList.isEmpty()){
                 ++sequentialStraightList[0];
                 if(sequentialStraightList[0] >= 5){
                     highSequential = i;
@@ -87,7 +87,7 @@ public final class CalculateHands {
         boolean foundThreeKind = false;
         boolean foundFourKind = false;
         for(Map.Entry<Integer, ArrayList<Integer>> set : cardsValueMapSuitList.entrySet()) {
-            if(set.getValue().size() == 0){
+            if(set.getValue().isEmpty()){
                 continue;
             }
             switch (set.getValue().size()) {
@@ -151,7 +151,7 @@ public final class CalculateHands {
         int[] suitCounts = new int[]{0,0,0,0};
         for(Map.Entry<Integer, ArrayList<Integer>> set : cardsValueMapSuitList.entrySet()) {
             ArrayList<Integer> currList = set.getValue();
-            if(currList.size() > 0){
+            if(!currList.isEmpty()){
                 for(int i = 0; i < currList.size(); ++i){
                     ++suitCounts[currList.get(i)-1];
                     if(suitCounts[currList.get(i)-1] >= 5){

@@ -82,7 +82,7 @@ public class Player extends CardHolder implements Comparable<Player>{
         String s1 = String.format("%s: %d", playerName, balance);
         
         LinkedList<Card> displayCards = getDisplayCards();
-        if(displayCards.size() > 0){
+        if(!displayCards.isEmpty()){
             String s2 = String.format(" | Cards Held: [S%d, V%d] [S%d, V%d]", 
             displayCards.get(0).getSuit(), 
             displayCards.get(0).getValue(),
@@ -117,11 +117,11 @@ public class Player extends CardHolder implements Comparable<Player>{
         }
         if(order == 0){
             for(int  i = 14; i >= 2; --i) {
-                ArrayList<Integer> xList = cardsValueMapSuitList.get(i);
-                ArrayList<Integer> yList = p.cardsValueMapSuitList.get(i);
-                if(xList.isEmpty() && !yList.isEmpty()){
+                boolean xListEmpty = cardsValueMapSuitList.get(i).isEmpty();
+                boolean yListEmpty = p.cardsValueMapSuitList.get(i).isEmpty();
+                if(xListEmpty && !yListEmpty){
                     return -1;
-                }else if(!xList.isEmpty() && yList.isEmpty()){
+                }else if(!xListEmpty && yListEmpty){
                     return 1;
                 }
             }
