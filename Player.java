@@ -78,6 +78,8 @@ public class Player extends CardHolder{
     }
 
     private int[] checkForStraightFlush(){ //FIXME: Case of [(1,2), (1,3), (2,3), (2,4), (2,5), (3,5), (3,6)] counts as sequentialAndFlush when it should not
+        // possible fix: use an array[] of LinkedList<Integer> to store sequentials with array[0] being suit 1, array[1] being suit 2 etc
+        
         int sequentialStreak = 1;
         int sequentialAndFlushStreak = 1;
         int highCardSeq = -1;
@@ -87,9 +89,9 @@ public class Player extends CardHolder{
 
         for(int i = 2; i <= 14; ++i){
             if(sequentialStreak >= 4){
-                highCardSeq = i;
+                highCardSeq = i-1;
                 if(sequentialAndFlushStreak >= 4){
-                    highCardSeqAndFlush = i;
+                    highCardSeqAndFlush = i-1;
                 }
             }
             ArrayList<Integer> currList = cardsValueMapSuitList.get(i);
