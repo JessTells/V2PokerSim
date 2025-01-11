@@ -243,7 +243,7 @@ public class RoundHandler {
                 sb.append(winnerList.get(0).getPlayerName());
                 sb.append(", ");
                 for(int i = 1; i < winnerList.size(); ++i){
-                    sb.append(sb.append(winnerList.get(i).getPlayerName()));
+                    sb.append(winnerList.get(i).getPlayerName());
                     if(i < winnerList.size() - 1){
                         sb.append(", ");
                     }else if(i == winnerList.size() - 1){
