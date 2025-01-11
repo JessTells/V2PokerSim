@@ -22,8 +22,11 @@ public class TestingGround {
         roundHandler.addSingleCardToCommunity();
         roundHandler.addSingleCardToCommunity();
 
-        roundHandler.calculateWinner();
+        roundHandler.printPlayerStates();
+        roundHandler.printCommunityCards();
 
-        roundHandler.printPlayerHandRank();
+        roundHandler.calculateAndAwardWinner();
+        roundHandler.printPlayerHandRank();;
+        
     }
 }

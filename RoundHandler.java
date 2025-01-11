@@ -1,6 +1,6 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
+import java.lang.StringBuilder;
 
 import CardHolders.*;
 import DeckAndCard.*;
@@ -155,7 +155,7 @@ public class RoundHandler {
         System.out.printf("Pot: %d credits\n", pot);
     }
 
-    public void betLoop(){
+    public void betLoop(){ //FIXME: Line 161
         int currPlayerIndex = 0;
         currentPlayerTurn = players.get(currPlayerIndex);
         while(currentPlayerTurn != previousPlayerWhoRaised && players.size() - foldedPlayers.size() > 1){
@@ -170,7 +170,7 @@ public class RoundHandler {
         previousPlayerWhoRaised = null;
     }
 
-    public boolean isThereWinner(){
+    public boolean isThereWinner(){// FIXME
         if(players.size() - foldedPlayers.size() <= 1){
             return true;
         }
@@ -208,12 +208,11 @@ public class RoundHandler {
         printCommunityCards();
         betLoop();
         printPot();
-        calculateWinner();
+        calculateAndAwardWinner();
     }
 
-    public void calculateWinner(){
+    public void calculateAndAwardWinner(){
         LinkedList<Player> winnerList = new LinkedList<>();
-        System.out.println("Fix RoundHandler: calculateWinner()");
         //FIXME Calculate player hands
         for(int i = 0; i < players.size(); ++i){
             Player p = players.get(i);
@@ -233,6 +232,40 @@ public class RoundHandler {
                 
             }
         }// TODO: They should be ordered in the LinkedList by this point, finish this
+        
+        StringBuilder sb = new StringBuilder();
+        if(winnerList.size() > 1){
+            if(winnerList.size() == 2){
+                sb.append(winnerList.get(0).getPlayerName());
+                sb.append(" and ");
+                sb.append(winnerList.get(1).getPlayerName());
+            }else{
+                sb.append(winnerList.get(0).getPlayerName());
+                sb.append(", ");
+                for(int i = 1; i < winnerList.size(); ++i){
+                    sb.append(sb.append(winnerList.get(i).getPlayerName()));
+                    if(i < winnerList.size() - 1){
+                        sb.append(", ");
+                    }else if(i == winnerList.size() - 1){
+                        sb.append(", and ");
+                    }
+                }
+            }
+            
+        }else{
+            sb.append(winnerList.get(0).getPlayerName());
+        }
+
+        sb.append(String.format(" won a pot of %d credits!", pot));
+        int amountToAward = Math.floorDiv(pot, winnerList.size());
+        
+        if(winnerList.size() > 1){
+            sb.append(String.format(" With each player getting %d credits each!", amountToAward));
+        }
+        for(int i = 0; i < winnerList.size(); ++i){
+            winnerList.get(i).addToBalance(amountToAward);
+        }
+        System.out.println(sb.toString());
     }
 
     public void resetEverythingForNewRound(){
