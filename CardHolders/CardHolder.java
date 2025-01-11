@@ -28,7 +28,7 @@ public abstract class CardHolder {
 
     @Override
     public String toString() {
-        String s1 = "Display Cards: ";
+        String s1 = "";
         if(displayCards.size() > 0){
             for(int i = 0; i < displayCards.size(); ++i){
                 s1 += String.format("[S:%d, V:%d] ", 
