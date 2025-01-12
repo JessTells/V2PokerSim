@@ -1,6 +1,7 @@
 import java.util.Scanner;
 
 import CardHolders.Player;
+import DeckAndCard.Card;
 
 public class TestingGround {
     public static void main(String[] args) {
@@ -12,21 +13,37 @@ public class TestingGround {
         Player p3 = new Player(1000, "p3");
         Player p4 = new Player(1000, "p4");
 
+        p1.addCard(new Card(3, 13));
+        p1.addCard(new Card(2, 8));
+
+        p2.addCard(new Card(2, 11));
+        p2.addCard(new Card(2, 14));
+
+        p3.addCard(new Card(3, 8));
+        p3.addCard(new Card(3, 2));
+
+        p4.addCard(new Card(4, 14));
+        p4.addCard(new Card(2, 9));
+
+
+
         roundHandler.addPlayer(p1);
         roundHandler.addPlayer(p2);
         roundHandler.addPlayer(p3);
         roundHandler.addPlayer(p4);
 
-        roundHandler.dealPlayerCards();
-        roundHandler.addThreeCardsToCommunity();
-        roundHandler.addSingleCardToCommunity();
-        roundHandler.addSingleCardToCommunity();
+        roundHandler.forceCommunityCard(1, 8);
+        roundHandler.forceCommunityCard(3, 12);
+        roundHandler.forceCommunityCard(4, 2);
+        roundHandler.forceCommunityCard(2, 12);
+        roundHandler.forceCommunityCard(3, 9);
+
 
         roundHandler.printPlayerStates();
         roundHandler.printCommunityCards();
 
         roundHandler.calculateAndAwardWinner();
-        roundHandler.printPlayerHandRank();;
+        roundHandler.printPlayerHandRank();
         
     }
     /* FIXME:

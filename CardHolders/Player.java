@@ -146,7 +146,7 @@ public class Player extends CardHolder implements Comparable<Player>{
                 }
             }
         }
-        return 0;
+        return order;
     }
 
     

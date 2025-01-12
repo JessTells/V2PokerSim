@@ -211,9 +211,8 @@ public class RoundHandler {
         calculateAndAwardWinner();
     }
 
-    public void calculateAndAwardWinner(){
+    public void calculateAndAwardWinner(){// FIXME
         LinkedList<Player> winnerList = new LinkedList<>();
-        //FIXME Calculate player hands
         for(int i = 0; i < players.size(); ++i){
             Player p = players.get(i);
             if(!foldedPlayers.contains(p)){
@@ -221,10 +220,11 @@ public class RoundHandler {
                 if(winnerList.isEmpty()){
                     winnerList.add(p);
                 }else{
-                    if(p.compareTo(winnerList.get(0)) > 0){
+                    int comparePlayerRank = p.compareTo(winnerList.get(0)); 
+                    if(comparePlayerRank > 0){
                         winnerList.clear();
                         winnerList.add(p);
-                    }else if(p.compareTo(winnerList.get(0)) == 0){
+                    }else if(comparePlayerRank == 0){
                         winnerList.add(p);
                     }
                     
@@ -284,6 +284,15 @@ public class RoundHandler {
         Player p = players.get(0);
         players.remove(0);
         players.add(p);
+    }
+
+    // TODO: Remove below method
+    public void forceCommunityCard(int suit, int value){
+        Card cardToAdd = new Card(suit, value);
+        communityHand.addCard(cardToAdd);
+        for(int i = 0; i < players.size(); ++i){
+            players.get(i).addCard(cardToAdd);
+        }
     }
 
     /*
