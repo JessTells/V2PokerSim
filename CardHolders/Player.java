@@ -67,6 +67,7 @@ public class Player extends CardHolder implements Comparable<Player>{
 
     @Override
     public void addCard(Card card) {
+        // inserts suits in order in their value's ArrayList
         // uses basic ordered insertion algorithm since the list gets AT MOST length of 4, so I feel it is a negligable time save
         ArrayList<Integer> currList = cardsValueMapSuitList.get(card.getValue());
         int compCardSuit = card.getSuit();
@@ -118,7 +119,7 @@ public class Player extends CardHolder implements Comparable<Player>{
         return s1;
     }
 
-    public String printHandRank(){
+    public String toStringHandRank(){
         String s = rank.toString();
         return s;
     }

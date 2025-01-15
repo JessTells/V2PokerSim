@@ -155,7 +155,7 @@ public final class CalculateHands {
             }
         }
 
-        int handRank = -1;
+        int handRank = 1;
         Card[] cards = new Card[5];
         if(cardLinkedLists[0].size() > 0){
             cardLinkedLists[0].toArray(cards);

@@ -143,7 +143,7 @@ public class RoundHandler {
     public void printPlayerHandRank(){
         for(int i = 0; i < players.size(); ++i){
             if(!foldedPlayers.contains(players.get(i))){
-                System.out.println(players.get(i).toString() + " " + players.get(i).printHandRank());    
+                System.out.println(players.get(i).toString() + " " + players.get(i).toStringHandRank());    
             }
         }
     }
