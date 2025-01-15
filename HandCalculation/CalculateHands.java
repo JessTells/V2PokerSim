@@ -20,12 +20,12 @@ public final class CalculateHands {
         hold = checkForNthOfAKind(cardsValueMapSuitList); // Evaluates rank 8, 7, 3, 2, 1 
         if(rank == null){
             rank = hold;
-        }else if(hold.handRank[0] > rank.handRank[0]){
+        }else if(hold.compareTo(rank) > 0){
             rank = hold;
         }
 
         hold = checkFlush(cardsValueMapSuitList);  // Evaluates rank 6
-        if(hold.handRank[0] > rank.handRank[0]){
+        if(hold != null && hold.compareTo(rank) > 0){
             rank = hold;
         }
         p.setHandRank(rank);
@@ -100,15 +100,16 @@ public final class CalculateHands {
             }
             prevList = currList;
         }
-        int[] handRank; // FIXME
+        
+        int handRank;
         Card[] cards = new Card[5];
         if(highSequentialAndFlushIndex > 0){
-            handRank = new int[] {9, -1};
+            handRank = 9;
             sequentialStraightList[highSequentialAndFlushIndex].toArray(cards);
             return new Rank(handRank, cards);
         }
         if(highSequentialIndex == 0){
-            handRank = new int[] {5, -1};
+            handRank = 5;
             sequentialStraightList[0].toArray(cards);
             return new Rank(handRank, cards);
         }
@@ -154,7 +155,7 @@ public final class CalculateHands {
             }
         }
 
-        int[] handRank = new int[]{1,-1};//FIXME
+        int handRank = -1;
         Card[] cards = new Card[5];
         if(cardLinkedLists[0].size() > 0){
             cardLinkedLists[0].toArray(cards);
@@ -166,7 +167,7 @@ public final class CalculateHands {
                     cards[4] = new Card(currArrList.get(0), i);
                 } 
             }
-            handRank[0] = 8;
+            handRank = 8;
             return new Rank(handRank, cards);
         }
         
@@ -177,10 +178,10 @@ public final class CalculateHands {
             cards[2] = currList.removeLast();
             currList = cardLinkedLists[2]; 
             if(currList.size() > 0){
-                handRank[0] = 7;
+                handRank = 7;
             }else{
                 currList = cardLinkedLists[3];  
-                handRank[0] = 4;  
+                handRank = 4;  
             }
             cards[3] = currList.removeLast();
             cards[4] = currList.removeLast();
@@ -190,10 +191,10 @@ public final class CalculateHands {
             LinkedList<Card> currList = cardLinkedLists[2];
             cards[0] = currList.removeLast(); 
             cards[1] = currList.removeLast();
-            handRank[0] = 3;
+            handRank = 3;
             if(currList.isEmpty()){
                 currList = cardLinkedLists[3];
-                handRank[0] = 2;
+                handRank = 2;
             }
             cards[2] = currList.removeLast(); 
             cards[3] = currList.removeLast();
@@ -211,7 +212,7 @@ public final class CalculateHands {
 
     @SuppressWarnings("unchecked")
     private static Rank checkFlush(HashMap<Integer, ArrayList<Integer>> cardsValueMapSuitList){
-        int[] handRank = new int[] {0, -1}; // FIXME
+        int handRank = -1; // FIXME
         int hasFlushIndex = -1;
         LinkedList<Card>[] suitCounts = new LinkedList[] {
             new LinkedList<Card>(), // 1 diamonds
@@ -236,7 +237,7 @@ public final class CalculateHands {
         }
         if(hasFlushIndex >= 0){
             Card[] cards = new Card[5];
-            handRank[0] = 6;
+            handRank = 6;
             suitCounts[hasFlushIndex].toArray(cards);
             return new Rank(handRank, cards);
         }else{

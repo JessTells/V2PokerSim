@@ -4,15 +4,15 @@ import java.util.Arrays;
 import DeckAndCard.Card;
 
 public class Rank implements Comparable<Rank>{
-    public int[] handRank;
+    public int handRank;
     public Card[] cards;
 
     public Rank(){
-        handRank = new int[]{0,0};
+        handRank = -1;
         cards = new Card[5];
     }
 
-    public Rank(int[] handRank, Card[] cards){
+    public Rank(int handRank, Card[] cards){
         this.handRank = handRank;
         this.cards = cards;
     }
@@ -21,26 +21,25 @@ public class Rank implements Comparable<Rank>{
     public String toString() {
         String s = "Cards: ";
         s += Arrays.toString(cards);
-        s += "\nRank: ";
-        s += Arrays.toString(handRank);
+        s += " Rank: ";
+        s += Integer.toString(handRank);
         return s;
     }
 
     @Override
     public int compareTo(Rank r) {
-        int order = Integer.compare(handRank[0], r.handRank[0]);
+        int order = Integer.compare(handRank, r.handRank);
         if(order == 0){
-            order = Integer.compare(handRank[1], r.handRank[1]);
+            for(int i = 0; i < cards.length; ++i){
+                order = cards[i].compareTo(r.cards[i]); 
+                if(order != 0){
+                    return order; 
+                }
+            }
         }else{
             return order;
         }
-        // possible tie ranks: X9, 6, 5, 3, 2, 1
-        if(handRank[0] == 9){
-            return 0;
-        }
-        if(handRank[0] == 6){
-
-        }
+        // possible tie ranks: 9, 6, 5, 3, 2, 1
         return order;
     }
 }

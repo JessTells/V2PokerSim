@@ -1,6 +1,5 @@
 package CardHolders;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -12,8 +11,6 @@ public class Player extends CardHolder implements Comparable<Player>{
     private int balance;
     private String playerName;
     private HashMap<Integer, ArrayList<Integer>> cardsValueMapSuitList; // for calculating hand ranks
-    //private int[] handRank;
-    private int cardsAdded;
     private Rank rank;
 
     public Player(int startingBalance, String playerName){
@@ -24,7 +21,6 @@ public class Player extends CardHolder implements Comparable<Player>{
         for(int i = 1; i <= 14; ++i){
             cardsValueMapSuitList.put(i, new ArrayList<Integer>());
         }
-        cardsAdded = 0;
     }
 
     public int getBalance(){
@@ -82,22 +78,16 @@ public class Player extends CardHolder implements Comparable<Player>{
         if(card.getValue() == 14){
             cardsValueMapSuitList.get(1).add(insertIndex, compCardSuit);;
         }
-        
-
-        /*FIXME
-        if(cardsAdded < 2){
-            super.addCard(card);
-        } 
-         */
         super.addCard(card);
-        
-        ++cardsAdded;
     }
 
 
+    public String toStringDisplayCards(){
+        return super.toString();
+    }
+
     @Override
     public String toString() {
-        /* FIXME
         String s1 = String.format("%s: %d", playerName, balance);
         
         LinkedList<Card> displayCards = getDisplayCards();
@@ -110,12 +100,10 @@ public class Player extends CardHolder implements Comparable<Player>{
             s1 += s2;
         }
 
-        */
-        
-        return super.toString();
+        return s1;
     }
 
-    public String printCalculationCards(){
+    public String toStringCalculationCards(){
         String s1 = "\nCalculation Cards: ";
         for(Map.Entry<Integer, ArrayList<Integer>> set : cardsValueMapSuitList.entrySet()) {
             
