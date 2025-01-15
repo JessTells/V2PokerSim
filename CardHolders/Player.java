@@ -6,13 +6,15 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import DeckAndCard.Card;
+import HandCalculation.Rank;
 
 public class Player extends CardHolder implements Comparable<Player>{
     private int balance;
     private String playerName;
     private HashMap<Integer, ArrayList<Integer>> cardsValueMapSuitList; // for calculating hand ranks
-    private int[] handRank;
+    //private int[] handRank;
     private int cardsAdded;
+    private Rank rank;
 
     public Player(int startingBalance, String playerName){
         super();
@@ -45,12 +47,12 @@ public class Player extends CardHolder implements Comparable<Player>{
         balance -= sub;
     }
 
-    public void setHandRank(int[] handRank){
-        this.handRank = handRank;
+    public void setHandRank(Rank rank){
+        this.rank = rank;
     }
 
-    public int[] getHandRank(){
-        return handRank;
+    public Rank getHandRank(){
+        return rank;
     }
 
     public HashMap<Integer, ArrayList<Integer>> getCalcCards(){
@@ -80,9 +82,14 @@ public class Player extends CardHolder implements Comparable<Player>{
         if(card.getValue() == 14){
             cardsValueMapSuitList.get(1).add(insertIndex, compCardSuit);;
         }
+        
+
+        /*FIXME
         if(cardsAdded < 2){
             super.addCard(card);
-        }
+        } 
+         */
+        super.addCard(card);
         
         ++cardsAdded;
     }
@@ -90,6 +97,7 @@ public class Player extends CardHolder implements Comparable<Player>{
 
     @Override
     public String toString() {
+        /* FIXME
         String s1 = String.format("%s: %d", playerName, balance);
         
         LinkedList<Card> displayCards = getDisplayCards();
@@ -102,9 +110,9 @@ public class Player extends CardHolder implements Comparable<Player>{
             s1 += s2;
         }
 
+        */
         
-        
-        return s1;
+        return super.toString();
     }
 
     public String printCalculationCards(){
@@ -123,30 +131,13 @@ public class Player extends CardHolder implements Comparable<Player>{
     }
 
     public String printHandRank(){
-        String s = Arrays.toString(handRank);
+        String s = rank.toString();
         return s;
     }
 
     @Override
     public int compareTo(Player p) {
-        int order = Integer.compare(handRank[0], p.handRank[0]);
-        if(order == 0){
-            order = Integer.compare(handRank[1], p.handRank[0]);
-        }else{
-            return order;
-        }
-        if(order == 0){
-            for(int  i = 14; i >= 2; --i) {
-                boolean xListEmpty = cardsValueMapSuitList.get(i).isEmpty();
-                boolean yListEmpty = p.cardsValueMapSuitList.get(i).isEmpty();
-                if(xListEmpty && !yListEmpty){
-                    return -1;
-                }else if(!xListEmpty && yListEmpty){
-                    return 1;
-                }
-            }
-        }
-        return order;
+        return rank.compareTo(p.rank);
     }
 
     

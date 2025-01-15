@@ -4,9 +4,9 @@ package DeckAndCard;
  Acts like a node
  */
 
-public class Card {
+public class Card implements Comparable<Card>{
     private int suit; // 1 diamonds, 2 hearts, 3 clubs, 4 spades
-    private int value; // 1 Ace, 11 Jack, 12 Queen, 13 King
+    private int value; // 1 Ace, 11 Jack, 12 Queen, 13 King, 14 Ace
 
     public Card(int suit, int value){ //TODO: make not public
         this.suit = suit;
@@ -25,5 +25,10 @@ public class Card {
     public String toString(){
         String cardStr = suit + " " + value;
         return cardStr;
+    }
+
+    @Override
+    public int compareTo(Card c) {
+        return Integer.compare(value, c.value);
     }
 }
