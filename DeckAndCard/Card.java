@@ -23,7 +23,7 @@ public class Card implements Comparable<Card>{
 
     @Override
     public String toString(){
-        String cardStr = suit + " " + value;
+        String cardStr = String.format("{S%d, V%d}", suit, value); 
         return cardStr;
     }
 

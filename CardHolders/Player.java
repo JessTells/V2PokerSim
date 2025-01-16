@@ -1,26 +1,22 @@
 package CardHolders;
-import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.LinkedList;
-import java.util.Map;
 
 import DeckAndCard.Card;
+import DeckAndCard.CardSuitArray;
 import HandCalculation.Rank;
 
 public class Player extends CardHolder implements Comparable<Player>{
     private int balance;
     private String playerName;
-    private HashMap<Integer, ArrayList<Integer>> cardsValueMapSuitList; // for calculating hand ranks
+    private LinkedList<CardSuitArray> calculationCards;
     private Rank rank;
 
     public Player(int startingBalance, String playerName){
         super();
         balance = startingBalance;
         this.playerName = playerName;
-        cardsValueMapSuitList = new HashMap<>();
-        for(int i = 1; i <= 14; ++i){
-            cardsValueMapSuitList.put(i, new ArrayList<Integer>());
-        }
+        calculationCards = new LinkedList<>();
     }
 
     public int getBalance(){
@@ -51,33 +47,39 @@ public class Player extends CardHolder implements Comparable<Player>{
         return rank;
     }
 
-    public HashMap<Integer, ArrayList<Integer>> getCalcCards(){
-        return cardsValueMapSuitList;
+    public LinkedList<CardSuitArray> getCalcCards(){
+        return calculationCards;
     }
 
     @Override
     public void clearCards() {
-        for(Map.Entry<Integer, ArrayList<Integer>> set : cardsValueMapSuitList.entrySet()) {
-            if(set.getValue().size() > 0){
-                set.getValue().clear();
-            }
-        }
+        calculationCards.clear();
         super.clearCards();
     }
 
     @Override
     public void addCard(Card card) {
-        // inserts suits in order in their value's ArrayList
-        // uses basic ordered insertion algorithm since the list gets AT MOST length of 4, so I feel it is a negligable time save
-        ArrayList<Integer> currList = cardsValueMapSuitList.get(card.getValue());
-        int compCardSuit = card.getSuit();
-        int insertIndex = 0;
-        for(int i = 0; i < currList.size() && compCardSuit > currList.get(i); ++i){
-            ++insertIndex;
-        }
-        currList.add(insertIndex, compCardSuit);
-        if(card.getValue() == 14){
-            cardsValueMapSuitList.get(1).add(insertIndex, compCardSuit);;
+        if(calculationCards.size() == 0){
+            calculationCards.add(new CardSuitArray(card));
+        }else{
+            int insertIndex = 0;
+            for(int i = 0; i < calculationCards.size(); ++i){
+                CardSuitArray cardSuitList = calculationCards.get(i);
+                if(cardSuitList.getCardValue() == card.getValue()){
+                    cardSuitList.addCardSuit(card);
+                    insertIndex = -1;
+                    break;
+                }else if(card.getValue() > cardSuitList.getCardValue()){
+                    ++insertIndex;
+                }else{
+                    break;
+                }
+                
+            }
+            if(insertIndex >= 0){
+                calculationCards.add(insertIndex, new CardSuitArray(card));        
+            }
+            
         }
         super.addCard(card);
     }
@@ -106,14 +108,13 @@ public class Player extends CardHolder implements Comparable<Player>{
 
     public String toStringCalculationCards(){
         String s1 = "\nCalculation Cards: ";
-        for(Map.Entry<Integer, ArrayList<Integer>> set : cardsValueMapSuitList.entrySet()) {
-            
-            ArrayList<Integer> currList = set.getValue(); 
-            if(!currList.isEmpty()){
-                for(int i = 0; i < currList.size(); ++i){
-                    s1 += String.format("[S:%d, V:%d] ",
-                     currList.get(i), set.getKey());
-                }   
+        for (CardSuitArray suitList : calculationCards) {
+            Card[] cardList = suitList.cardSuits;
+            for(int i = 0; i < cardList.length; ++i){
+                if(cardList[i] == null){
+                    continue;
+                }
+                s1 += cardList[i].toString();
             }
         }
         return s1;

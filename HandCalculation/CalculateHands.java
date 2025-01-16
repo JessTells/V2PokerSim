@@ -1,30 +1,28 @@
 package HandCalculation;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.LinkedList;
 
 import DeckAndCard.Card;
+import DeckAndCard.CardSuitArray;
 
 import CardHolders.Player;
 
 public final class CalculateHands {
     public static void rankCardHand(Player p){
-        HashMap<Integer, ArrayList<Integer>> cardsValueMapSuitList = p.getCalcCards();
+        LinkedList<CardSuitArray> calculationCards = p.getCalcCards();
         Rank hold;
-        Rank rank; // TODO have class Rank be used to hold hand rank and cards that create that rank
+        Rank rank;
 
         
-        rank = checkForStraightFlush(cardsValueMapSuitList); // Evaluates rank 9, 5
+        rank = checkForStraightFlush(calculationCards); // Evaluates rank 9, 5
         
-        hold = checkForNthOfAKind(cardsValueMapSuitList); // Evaluates rank 8, 7, 3, 2, 1 
+        hold = checkForNthOfAKind(calculationCards); // Evaluates rank 8, 7, 3, 2, 1 
         if(rank == null){
             rank = hold;
         }else if(hold.compareTo(rank) > 0){
             rank = hold;
         }
 
-        hold = checkFlush(cardsValueMapSuitList);  // Evaluates rank 6
+        hold = checkFlush(calculationCards);  // Evaluates rank 6
         if(hold != null && hold.compareTo(rank) > 0){
             rank = hold;
         }
@@ -44,156 +42,141 @@ public final class CalculateHands {
     
 
     @SuppressWarnings("unchecked")
-    private static Rank checkForStraightFlush(HashMap<Integer, ArrayList<Integer>> cardsValueMapSuitList){ 
-        LinkedList<Card>[] sequentialStraightList = new LinkedList[]{
+    private static Rank checkForStraightFlush(LinkedList<CardSuitArray> calculationCards){ 
+        LinkedList<Card>[] sequentialAndFlushList = new LinkedList[]{
             new LinkedList<Card>(), // non-flush consecutive
             new LinkedList<Card>(), // 1 diamonds
             new LinkedList<Card>(), // 2 hearts  
             new LinkedList<Card>(), // 3 clubs 
             new LinkedList<Card>()};// 4 spades
-        LinkedList<Card> hold;
-        int highSequentialIndex = -1;
-        int highSequentialAndFlushIndex = -1;
-        ArrayList<Integer> prevList = cardsValueMapSuitList.get(1);
-        
-        for(int i = 2; i <= 14; ++i){
-            ArrayList<Integer> currList = cardsValueMapSuitList.get(i);
-            if(prevList.isEmpty()){
-                prevList = currList;
-                continue;
-            }
+        LinkedList<Card> seqOrFlushList = null;
+        int handRank = -1;
+        CardSuitArray prevArr = calculationCards.get(0);
+        int seqIndex = -1;
+
+        for(int i = 1; i < calculationCards.size(); ++i){
+            CardSuitArray currArr = calculationCards.get(i);
             
-            if(sequentialStraightList[0].isEmpty()){
-                sequentialStraightList[0].add(new Card(prevList.get(0), i-1));
-                for(int j = 0; j < prevList.size(); ++j){
-                    int suitIndex = prevList.get(j);
-                    sequentialStraightList[suitIndex].add(new Card(suitIndex, i-1));
+            sequentialAndFlushList[0].add(prevArr.firstCardAdded);
+            for(int j = 0; j < prevArr.cardSuits.length; ++j){
+                if(prevArr.cardSuits[j] == null){
+                    continue;
                 }
-                
+                sequentialAndFlushList[prevArr.cardSuits[j].getSuit()].add(prevArr.cardSuits[j]);
             }
             
 
-            if(!currList.isEmpty()){
-                sequentialStraightList[0].add(new Card(currList.get(0), i));
-                if(sequentialStraightList[0].size() >= 5){
-                    highSequentialIndex = 0;
-                }
-                for(int j = 0; j < currList.size(); ++j){
-                    int suitIndex = currList.get(j);
-                    sequentialStraightList[suitIndex].add(new Card(suitIndex, i));
-                    if(sequentialStraightList[suitIndex].size() >= 5){
-                        if(sequentialStraightList[suitIndex].size() > 5){
-                            sequentialStraightList[suitIndex].removeFirst();
-                        }
-                        highSequentialAndFlushIndex = suitIndex;
+            if(prevArr.getCardValue() == currArr.getCardValue()-1){
+
+                sequentialAndFlushList[0].add(currArr.firstCardAdded);
+                if(sequentialAndFlushList[0].size() >= 5){
+                    seqIndex = 0;
+                    if(sequentialAndFlushList[0].size() > 5){
+                        sequentialAndFlushList[0].removeFirst();
                     }
                 }
-                if(sequentialStraightList[0].size() > 5){
-                    sequentialStraightList[0].removeFirst();
+
+                for(int j = 0; j < currArr.cardSuits.length; ++j){
+                    if(currArr.cardSuits[j] == null){
+                        continue;
+                    }
+                    int suitIndex = currArr.cardSuits[j].getSuit();
+                    sequentialAndFlushList[suitIndex].add(currArr.cardSuits[j]);
+                    if(sequentialAndFlushList[suitIndex].size() >= 5){
+                        seqIndex = suitIndex;
+                        if(sequentialAndFlushList[suitIndex].size() > 5){
+                            sequentialAndFlushList[suitIndex].removeFirst();
+                        }
+                    }
                 }
+                
             }else{
-                if(!sequentialStraightList[0].isEmpty()){
-                    for(int j = 0; j < sequentialStraightList.length; ++j){
-                        if(sequentialStraightList[j].size() >= 5){
-                            hold = sequentialStraightList[j];
-                            sequentialStraightList[j] = new LinkedList<>();
-                        }else{
-                            sequentialStraightList[j].clear();
-                        }
-                        
-                    }
+                if(seqIndex >= 0){
+                    handRank = (seqIndex == 0) ? 5 : 9; 
+                    
+                    seqOrFlushList = sequentialAndFlushList[seqIndex];
+                    sequentialAndFlushList[seqIndex] = new LinkedList<>();
+                }
+                seqIndex = -1;
+                
+                for(int j = 0; j < sequentialAndFlushList.length; ++j){
+                    sequentialAndFlushList[j].clear();
                 }
             }
-            prevList = currList;
+            prevArr = currArr;
         }
         
-        int handRank;
         Card[] cards = new Card[5];
-        
-        if(highSequentialAndFlushIndex > 0){
-            handRank = 9;
-            sequentialStraightList[highSequentialAndFlushIndex].toArray(cards);
-            return new Rank(handRank, cards);
+
+        if(seqIndex >= 0){
+            int tempRank = (seqIndex == 0) ? 5 : 9; 
+            if(tempRank >= handRank){
+                handRank = tempRank;
+                seqOrFlushList = sequentialAndFlushList[seqIndex];
+            }
         }
-        if(highSequentialIndex == 0){
-            handRank = 5;
-            sequentialStraightList[0].toArray(cards);
+
+        if(seqOrFlushList != null){
+            seqOrFlushList.toArray(cards);
             return new Rank(handRank, cards);
         }
         return null;
     }
 
     @SuppressWarnings("unchecked")
-    private static Rank checkForNthOfAKind(HashMap<Integer, ArrayList<Integer>> cardsValueMapSuitList){//FIXME
+    private static Rank checkForNthOfAKind(LinkedList<CardSuitArray> calculationCards){
         LinkedList<Card>[] cardLinkedLists = new LinkedList[] {
             new LinkedList<Card>(), // four of a kind
             new LinkedList<Card>(), // three of a kind
             new LinkedList<Card>(), // two of a kind
             new LinkedList<Card>()};// singles
 
-        for(Map.Entry<Integer, ArrayList<Integer>> set : cardsValueMapSuitList.entrySet()) {
-            if(set.getValue().isEmpty()){
-                continue;
-            }
-            ArrayList<Integer> suitList = set.getValue();
-            switch (set.getValue().size()) {
-                case 2:
-                    cardLinkedLists[2].add(new Card(suitList.get(0), set.getKey()));
-                    cardLinkedLists[2].add(new Card(suitList.get(1), set.getKey()));
-                    break;
-            
-                case 3:
-                    cardLinkedLists[1].add(new Card(suitList.get(0), set.getKey()));
-                    cardLinkedLists[1].add(new Card(suitList.get(1), set.getKey()));
-                    cardLinkedLists[1].add(new Card(suitList.get(1), set.getKey()));    
-                    break;
-                
-                case 4:
-                    cardLinkedLists[0].add(new Card(suitList.get(0), set.getKey()));
-                    cardLinkedLists[0].add(new Card(suitList.get(1), set.getKey()));
-                    cardLinkedLists[0].add(new Card(suitList.get(2), set.getKey()));
-                    cardLinkedLists[0].add(new Card(suitList.get(3), set.getKey()));
-                break;
-
-                default:
-                    cardLinkedLists[3].add(new Card(suitList.get(0), set.getKey()));
-                break;
-            
+        for(int i = (calculationCards.get(0).getCardValue() == 1) ? 1 : 0; i < calculationCards.size(); ++i) {
+            CardSuitArray suitList = calculationCards.get(i);
+            int insertIndex = 4 - suitList.size();
+            for(int j = 0; j < suitList.cardSuits.length; ++j){
+                if(suitList.cardSuits[j] == null){
+                    continue;
+                }
+                cardLinkedLists[insertIndex].add(suitList.cardSuits[j]);
             }
         }
 
         int handRank = 1;
         Card[] cards = new Card[5];
+        
         if(cardLinkedLists[0].size() > 0){
-            cardLinkedLists[0].toArray(cards);
-            for(int i = 14; i <= 2; --i){
-                ArrayList<Integer> currArrList = cardsValueMapSuitList.get(i);
-                if(currArrList.isEmpty() || currArrList.size() == 4){
-                    continue;
-                }else{
-                    cards[4] = new Card(currArrList.get(0), i);
-                } 
-            }
+            cards[0] = cardLinkedLists[0].removeLast();    
+            cards[1] = cardLinkedLists[0].removeLast();
+            cards[2] = cardLinkedLists[0].removeLast();
+            cards[3] = cardLinkedLists[0].removeLast();
+            cards[4] = cardLinkedLists[3].removeLast();
             handRank = 8;
             return new Rank(handRank, cards);
         }
         
         if(cardLinkedLists[1].size() > 0){
-            LinkedList<Card> currList = cardLinkedLists[1];
-            cards[0] = currList.removeLast();
-            cards[1] = currList.removeLast();
-            cards[2] = currList.removeLast();
-            currList = cardLinkedLists[2]; 
-            if(currList.size() > 0){
+            LinkedList<Card> threeOfKind = cardLinkedLists[1];
+
+            cards[0] = threeOfKind.removeLast();
+            cards[1] = threeOfKind.removeLast();
+            cards[2] = threeOfKind.removeLast();
+
+            LinkedList<Card> lessOfKind = cardLinkedLists[2]; 
+            if(!threeOfKind.isEmpty() || !lessOfKind.isEmpty()){
                 handRank = 7;
+                if(!threeOfKind.isEmpty()){
+                    lessOfKind = (threeOfKind.getLast().compareTo(lessOfKind.getLast()) > 0) ? threeOfKind: lessOfKind;
+                }
             }else{
-                currList = cardLinkedLists[3];  
+                lessOfKind = cardLinkedLists[3];  
                 handRank = 4;  
             }
-            cards[3] = currList.removeLast();
-            cards[4] = currList.removeLast();
+            cards[3] = lessOfKind.removeLast();
+            cards[4] = lessOfKind.removeLast();
             return new Rank(handRank, cards);
         }
+
         if(cardLinkedLists[2].size() > 0){
             LinkedList<Card> currList = cardLinkedLists[2];
             cards[0] = currList.removeLast(); 
@@ -218,8 +201,8 @@ public final class CalculateHands {
     }
 
     @SuppressWarnings("unchecked")
-    private static Rank checkFlush(HashMap<Integer, ArrayList<Integer>> cardsValueMapSuitList){
-        int handRank = -1; // FIXME
+    private static Rank checkFlush(LinkedList<CardSuitArray> calculationCards){
+        int handRank = -1;
         int hasFlushIndex = -1;
         LinkedList<Card>[] suitCounts = new LinkedList[] {
             new LinkedList<Card>(), // 1 diamonds
@@ -227,20 +210,22 @@ public final class CalculateHands {
             new LinkedList<Card>(), // 3 clubs 
             new LinkedList<Card>()};// 4 spades
 
-        for(int i = 2; i <= 14; ++i) {
-            ArrayList<Integer> currList = cardsValueMapSuitList.get(i);
-            if(!currList.isEmpty()){
-                for(int j = 0; j < currList.size(); ++j){
-                    int suitIndex = currList.get(j)-1; 
-                    suitCounts[suitIndex].add(new Card(suitIndex+1, i));
-                    if(suitCounts[suitIndex].size() >= 5){
-                        hasFlushIndex = suitIndex;
-                        if(suitCounts[suitIndex].size() > 5){
-                            suitCounts[suitIndex].removeFirst();
-                        }
+        for(int i = 0; i < calculationCards.size(); ++i) {
+            CardSuitArray suitArr = calculationCards.get(i);
+            
+            for(int j = 0; j < suitArr.cardSuits.length; ++j){
+                if(suitArr.cardSuits[j] == null){
+                    continue;
+                }
+                suitCounts[j].add(suitArr.cardSuits[j]);
+                if(suitCounts[j].size() >= 5){
+                    hasFlushIndex = j;
+                    if(suitCounts[j].size() > 5){
+                        suitCounts[j].removeFirst();
                     }
                 }
             }
+            
         }
         if(hasFlushIndex >= 0){
             Card[] cards = new Card[5];

@@ -33,9 +33,10 @@ public class TestingGround {
         p1.addCard(new Card(4, 4));
         p1.addCard(new Card(4, 7));
         p1.addCard(new Card(2, 6));
-        CalculateHands.rankCardHand(p1);
+        //CalculateHands.rankCardHand(p1);
         System.out.println(p1.toString());
-        System.out.println(p1.toStringHandRank());
+        System.out.println(p1.toStringCalculationCards());
+        //System.out.println(p1.toStringHandRank());
 
         
         
