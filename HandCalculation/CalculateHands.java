@@ -51,6 +51,7 @@ public final class CalculateHands {
             new LinkedList<Card>(), // 2 hearts  
             new LinkedList<Card>(), // 3 clubs 
             new LinkedList<Card>()};// 4 spades
+        LinkedList<Card> hold;
         int highSequentialIndex = -1;
         int highSequentialAndFlushIndex = -1;
         ArrayList<Integer> prevList = cardsValueMapSuitList.get(1);
@@ -73,7 +74,6 @@ public final class CalculateHands {
             
 
             if(!currList.isEmpty()){
-                //FIXME
                 sequentialStraightList[0].add(new Card(currList.get(0), i));
                 if(sequentialStraightList[0].size() >= 5){
                     highSequentialIndex = 0;
@@ -94,7 +94,13 @@ public final class CalculateHands {
             }else{
                 if(!sequentialStraightList[0].isEmpty()){
                     for(int j = 0; j < sequentialStraightList.length; ++j){
-                        sequentialStraightList[j].clear();
+                        if(sequentialStraightList[j].size() >= 5){
+                            hold = sequentialStraightList[j];
+                            sequentialStraightList[j] = new LinkedList<>();
+                        }else{
+                            sequentialStraightList[j].clear();
+                        }
+                        
                     }
                 }
             }
@@ -103,6 +109,7 @@ public final class CalculateHands {
         
         int handRank;
         Card[] cards = new Card[5];
+        
         if(highSequentialAndFlushIndex > 0){
             handRank = 9;
             sequentialStraightList[highSequentialAndFlushIndex].toArray(cards);
