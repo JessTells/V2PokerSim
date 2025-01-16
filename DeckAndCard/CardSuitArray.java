@@ -11,12 +11,10 @@ public class CardSuitArray {
         cardSuits[card.getSuit()-1] = card;
         size = 1;
         cardValue = card.getValue();
+        firstCardAdded = card;
     }
 
     public void addCardSuit(Card card){
-        if(firstCardAdded == null){
-            firstCardAdded = card;
-        }
         cardSuits[card.getSuit()-1] = card;
         ++size;
     }

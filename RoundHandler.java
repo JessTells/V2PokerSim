@@ -43,6 +43,7 @@ public class RoundHandler {
         System.out.println("(2) Raise?");
         System.out.println("(3) Fold?");
         System.out.printf("Enter your choice: ");
+        
         int currPlayerChoice = scnr.nextInt();
         playerSelection(currPlayerChoice);
     }

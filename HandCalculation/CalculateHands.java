@@ -57,13 +57,16 @@ public final class CalculateHands {
         for(int i = 1; i < calculationCards.size(); ++i){
             CardSuitArray currArr = calculationCards.get(i);
             
-            sequentialAndFlushList[0].add(prevArr.firstCardAdded);
-            for(int j = 0; j < prevArr.cardSuits.length; ++j){
-                if(prevArr.cardSuits[j] == null){
-                    continue;
+            if(sequentialAndFlushList[0].isEmpty()){
+                sequentialAndFlushList[0].add(prevArr.firstCardAdded);
+                for(int j = 0; j < prevArr.cardSuits.length; ++j){
+                    if(prevArr.cardSuits[j] == null){
+                        continue;
+                    }
+                    sequentialAndFlushList[prevArr.cardSuits[j].getSuit()].add(prevArr.cardSuits[j]);
                 }
-                sequentialAndFlushList[prevArr.cardSuits[j].getSuit()].add(prevArr.cardSuits[j]);
             }
+            
             
 
             if(prevArr.getCardValue() == currArr.getCardValue()-1){
@@ -150,7 +153,18 @@ public final class CalculateHands {
             cards[1] = cardLinkedLists[0].removeLast();
             cards[2] = cardLinkedLists[0].removeLast();
             cards[3] = cardLinkedLists[0].removeLast();
-            cards[4] = cardLinkedLists[3].removeLast();
+            
+            LinkedList<Card> threeOfKind = cardLinkedLists[1];
+            LinkedList<Card> twoOfKind = cardLinkedLists[2];
+            LinkedList<Card> oneOfKind = cardLinkedLists[3];
+            if(oneOfKind.isEmpty()){
+                cards[4] = threeOfKind.removeLast();
+            }else if(!twoOfKind.isEmpty()){
+                cards[4] = (twoOfKind.getLast().compareTo(oneOfKind.getLast()) > 0) ? twoOfKind.removeLast(): oneOfKind.removeLast();
+            }else{
+                cards[4] = cardLinkedLists[3].removeLast();
+            }
+            
             handRank = 8;
             return new Rank(handRank, cards);
         }
