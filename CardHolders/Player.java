@@ -1,5 +1,6 @@
 package CardHolders;
 
+import java.util.Scanner;
 import java.util.LinkedList;
 
 import DeckAndCard.Card;
@@ -11,12 +12,39 @@ public class Player extends CardHolder implements Comparable<Player>{
     private String playerName;
     private LinkedList<CardSuitArray> calculationCards;
     private Rank rank;
+    private Scanner input;
 
-    public Player(int startingBalance, String playerName){
+    protected Player(int startingBalance, String playerName){
         super();
         balance = startingBalance;
         this.playerName = playerName;
         calculationCards = new LinkedList<>();
+        input = null;
+    }
+
+    public Player(int startingBalance, String playerName, Scanner input){
+        super();
+        balance = startingBalance;
+        this.playerName = playerName;
+        calculationCards = new LinkedList<>();
+        this.input = input;
+    }
+
+    public int makeChoice(){
+        int choice = input.nextInt();
+        return choice;
+    }
+
+    public int makeBet(int prevBet){
+        int amount = input.nextInt();
+
+        if(amount != balance && amount < prevBet){
+            System.out.printf("\n* Value is less than previous bet of %d*\n\n", prevBet);
+            System.out.print("Enter amount: ");
+            makeBet(prevBet);
+        }
+        amount = subFromBalance(amount);
+        return amount;
     }
 
     public int getBalance(){
@@ -35,8 +63,12 @@ public class Player extends CardHolder implements Comparable<Player>{
         balance += add;
     }
 
-    public void subFromBalance(int sub){
-        balance -= sub;
+    public int subFromBalance(int amount){
+        if(amount > balance){
+            amount = balance;
+        }
+        balance -= amount;
+        return amount;
     }
 
     public void setHandRank(Rank rank){

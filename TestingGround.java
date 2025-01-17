@@ -1,8 +1,8 @@
-import java.util.Scanner;
-
 import CardHolders.Player;
 import DeckAndCard.*;
 import HandCalculation.*;
+
+import java.util.Scanner;
 
 
 //9: Straight Flush
@@ -17,22 +17,27 @@ import HandCalculation.*;
 
 public class TestingGround {
     public static void main(String[] args) {
-        
-        
-        
+
         Scanner scnr = new Scanner(System.in);
+
         RoundHandler roundHandler = new RoundHandler(scnr);
-        
-        Player p1 = new Player(1000, "p1");
-        Player p2 = new Player(1000, "p2");
-        Player p3 = new Player(1000, "p3");
-        Player p4 = new Player(1000, "p4");
+
+        Player p1 = new Player(1000, "p1", scnr);
+        Player p2 = new Player(1000, "p2", scnr);
+        Player p3 = new Player(1000, "p3", scnr);
+        Player p4 = new Player(1000, "p4", scnr);
 
         roundHandler.addPlayer(p1);
         roundHandler.addPlayer(p2);
         roundHandler.addPlayer(p3);
         roundHandler.addPlayer(p4);
 
+        roundHandler.betLoop();
+
+        scnr.close();
+    }
+    /*
+        
         roundHandler.dealPlayerCards();
         roundHandler.addThreeCardsToCommunity();
         roundHandler.addSingleCardToCommunity();
@@ -43,22 +48,6 @@ public class TestingGround {
 
         roundHandler.calculateAndAwardWinner();
         roundHandler.printPlayerHandRank();
-        
-        scnr.close();
-    }
-    /* FIXME:
-
-        p1.addCard(new Card(4, 14));
-        p1.addCard(new Card(4, 13));
-        p1.addCard(new Card(4, 12));
-        p1.addCard(new Card(4, 11));
-        p1.addCard(new Card(4, 10));
-        p1.addCard(new Card(2, 11));
-        p1.addCard(new Card(3, 3));
-        CalculateHands.rankCardHand(p1);
-        System.out.println(p1.toString());
-        System.out.println(p1.toStringCalculationCards());
-        System.out.println(p1.toStringHandRank());
      */
     
 

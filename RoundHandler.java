@@ -21,41 +21,40 @@ public class RoundHandler {
     private Player previousPlayerWhoRaised;
     
 
-    RoundHandler(Scanner scnr){
-        this.scnr = scnr;
+    public RoundHandler(Scanner scnr){
         players = new ArrayList<>();
         foldedPlayers = new HashSet<>();
         deck = new Deck();
         communityHand = new CommunityHand();
         previousBet = 3;
+        this.scnr = scnr;
     }
 
-    // TODO: createPlayer() method
+    // TODO: createPlayer() method and createBot()
+
     public void addPlayer(Player p){
         players.add(p);
     }
 
-    //TODO: make the interface for playerBet() better, make playerSelection so that in the future it interacts with bots smoothly
-    //TODO: all things that require input are going to need to be changed so that it interacts with bots
     private void playerBet(){
         System.out.printf(" %s\n", currentPlayerTurn.getPlayerName());
         System.out.printf("(1) Current Bet: %d\n", previousBet);
         System.out.println("(2) Raise?");
         System.out.println("(3) Fold?");
         System.out.printf("Enter your choice: ");
+
+        int currPlayerChoice;
         
-        int currPlayerChoice = scnr.nextInt();
-        playerSelection(currPlayerChoice);
+        currPlayerChoice = currentPlayerTurn.makeChoice();
+        
+        playerBetSelection(currPlayerChoice);
     }
 
-    private void playerSelection(int currPlayerChoice){
+    private void playerBetSelection(int currPlayerChoice){
         switch(currPlayerChoice){
             case 1:
-            if(previousBet > currentPlayerTurn.getBalance()){
-                currPlayerBet(currentPlayerTurn.getBalance());
-            }else{
-                currPlayerBet(previousBet);
-            }
+            int betAmount = currentPlayerTurn.subFromBalance(previousBet);
+            pot += betAmount;
             if(previousPlayerWhoRaised == null){
                 previousPlayerWhoRaised = currentPlayerTurn;
             }
@@ -77,25 +76,11 @@ public class RoundHandler {
 
     private void playerRaise(){
         System.out.print("Enter your bet amount: ");
-        int betAmount = scnr.nextInt();
-        if(betAmount > currentPlayerTurn.getBalance()){
-            betAmount = currentPlayerTurn.getBalance();
-            currPlayerBet(betAmount);
-        }else if(betAmount < previousBet){
-            System.out.printf("\n* Value is less than previous bet of %d*\n\n", previousBet);
-            playerRaise();
-        }else{
-            currPlayerBet(betAmount);
-            previousPlayerWhoRaised = currentPlayerTurn;
-        }
-    }
-
-    private void currPlayerBet(int betAmount){
-        currentPlayerTurn.subFromBalance(betAmount);
+        int betAmount = currentPlayerTurn.makeBet(previousBet);
         pot += betAmount;
         previousBet = betAmount;
+        previousPlayerWhoRaised = currentPlayerTurn;
     }
-
 
     private void removePlayerFromRound(){
         foldedPlayers.add(currentPlayerTurn);
@@ -157,7 +142,7 @@ public class RoundHandler {
         System.out.printf("Pot: %d credits\n", pot);
     }
 
-    public void betLoop(){ //FIXME: Line 161
+    public void betLoop(){
         int currPlayerIndex = 0;
         currentPlayerTurn = players.get(currPlayerIndex);
         while(currentPlayerTurn != previousPlayerWhoRaised && players.size() - foldedPlayers.size() > 1){
@@ -172,7 +157,7 @@ public class RoundHandler {
         previousPlayerWhoRaised = null;
     }
 
-    public boolean isThereWinner(){// FIXME
+    public boolean isThereWinner(){
         if(players.size() - foldedPlayers.size() <= 1){
             return true;
         }
@@ -213,7 +198,7 @@ public class RoundHandler {
         calculateAndAwardWinner();
     }
 
-    public void calculateAndAwardWinner(){// FIXME
+    public void calculateAndAwardWinner(){
         LinkedList<Player> winnerList = new LinkedList<>();
         for(int i = 0; i < players.size(); ++i){
             Player p = players.get(i);
@@ -233,7 +218,7 @@ public class RoundHandler {
                 }
                 
             }
-        }// TODO: They should be ordered in the LinkedList by this point, finish this
+        }
         
         StringBuilder sb = new StringBuilder();
         if(winnerList.size() > 1){
